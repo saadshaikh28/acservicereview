@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Service Review Engine</title>
+    <meta name="description" content="Generate a professional Google review for your AC technician in clicks.">
+
+    <!-- Open Graph / Social Previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="/">
+    <meta property="og:title" id="ogTitle" content="Share Your AC Service Experience">
+    <meta property="og:description" content="Help others find the best AC service by sharing your feedback.">
+    <meta property="og:image" content="/ac-review-bg.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="/">
+    <meta property="twitter:title" id="twitterTitle" content="Share Your AC Service Experience">
+    <meta property="twitter:description" content="Help others find the best AC service by sharing your feedback.">
+    <meta property="twitter:image" content="/ac-review-bg.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+
+    <!-- 3D Background Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title" id="mainHeroTitle">
+                <span class="line">Share your experience about</span>
+                <span class="line company-brand" id="titleCompanyName">our AC team</span>
+            </h1>
+        </div>
+    </header>
+
+    <!-- Review Section -->
+    <section id="review-engine" class="calculator-section">
+        <div class="container">
+            <div class="calculator-card glass-panel">
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                    <div class="steps-indicator">
+                        <span class="step-dot active">1</span>
+                        <span class="step-dot">2</span>
+                        <span class="step-dot">3</span>
+                        <span class="step-dot">4</span>
+                    </div>
+                </div>
+
+                <form id="reviewForm" onsubmit="return false;">
+
+                    <!-- STEP 1: SERVICE DETAILS -->
+                    <div class="wizard-step active" data-step="1">
+                        <div class="step-header">
+                            <span class="step-badge">Section 1 / 3</span>
+                            <h2>What did we do?</h2>
+                            <p>Select the service we provided and we'll do the rest.</p>
+                        </div>
+
+                        <!-- Service Type -->
+                        <div class="form-group">
+                            <label>Service Type</label>
+                            <div class="shape-grid">
+                                <div class="shape-option" data-value="AC replacement" data-group="service">
+                                    <svg viewBox="0 0 24 24" class="roof-icon" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
+                                    </svg>
+                                    <span>Replacement</span>
+                                </div>
+                                <div class="shape-option" data-value="AC repair" data-group="service">
+                                    <svg viewBox="0 0 24 24" class="roof-icon" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+                                        </path>
+                                    </svg>
+                                    <span>Repair</span>
+                                </div>
+                                <div class="shape-option" data-value="AC maintenance" data-group="service">
+                                    <svg viewBox="0 0 24 24" class="roof-icon" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                                    </svg>
+                                    <span>Maintenance</span>
+                                </div>
+                                <div class="shape-option" data-value="emergency AC service" data-group="service">
+                                    <svg viewBox="0 0 24 24" class="roof-icon" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                                    </svg>
+                                    <span>Emergency</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-nav">
+                            <div></div>
+                            <button class="btn btn-primary next-btn">Next Step &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: EXPERIENCE -->
+                    <div class="wizard-step" data-step="2">
+                        <div class="step-header">
+                            <span class="step-badge">Section 2 / 3</span>
+                            <h2>How was your experience?</h2>
+                            <p>Slide to rate our team's performance.</p>
+                        </div>
+
+                        <!-- Professionalism -->
+                        <div class="form-group">
+                            <label>Professionalism</label>
+                            <div class="slider-container">
+                                <span id="professionalismDisplay" class="slider-val-display">Good</span>
+                                <input type="range" id="professionalismSlider" min="1" max="3" step="1" value="1">
+                                <div class="slider-labels" id="professionalismLabels">
+                                    <span class="active">Good</span>
+                                    <span>Professional</span>
+                                    <span>Exceptional</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Communication -->
+                        <div class="form-group">
+                            <label>Communication</label>
+                            <div class="slider-container">
+                                <span id="communicationDisplay" class="slider-val-display">Responsive</span>
+                                <input type="range" id="communicationSlider" min="1" max="3" step="1" value="1">
+                                <div class="slider-labels" id="communicationLabels">
+                                    <span class="active">Responsive</span>
+                                    <span>Proactive</span>
+                                    <span>Flawless</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeliness -->
+                        <div class="form-group">
+                            <label>Job Completed in...</label>
+                            <div class="slider-container">
+                                <span id="timeDisplay" class="slider-val-display">On Time</span>
+                                <input type="range" id="timeSlider" min="1" max="3" step="1" value="1">
+                                <div class="slider-labels" id="timeLabels">
+                                    <span>On Time</span>
+                                    <span>Ahead of Schedule</span>
+                                    <span>Record Time</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-nav">
+                            <button class="btn btn-outline prev-btn">&larr; Previous Step</button>
+                            <button class="btn btn-primary next-btn">Next Step &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: FINAL POLISH -->
+                    <div class="wizard-step" data-step="3">
+                        <div class="step-header">
+                            <span class="step-badge">Section 3 / 3</span>
+                            <h2>Final Touches</h2>
+                            <p>Anything else you'd like to mention? (Optional)</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Additional Comments</label>
+                            <textarea id="additionalComments" class="glass-textarea"
+                                placeholder="e.g. They left the property spotless!"></textarea>
+                        </div>
+
+                        <div class="step-nav">
+                            <button class="btn btn-outline prev-btn">&larr; Previous Step</button>
+                            <button class="btn btn-primary next-btn">Generate Review &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: RESULT -->
+                    <div class="wizard-step" data-step="4">
+                        <div class="results-container">
+                            <div class="step-header">
+                                <span class="step-badge">Your Review is Ready!</span>
+                                <h2>Here's what we generated:</h2>
+                                <p>Click to copy and then head to Google Maps.</p>
+                            </div>
+
+                            <div class="review-editor-container">
+                                <textarea id="reviewText" class="generated-review-box editable-review"
+                                    spellcheck="false"></textarea>
+                                <div class="edit-hint">You can edit the text above if you'd like to make it personal!
+                                </div>
+                            </div>
+
+                            <div class="action-steps vertical-stack mt-4">
+                                <div class="step-action">
+                                    <span class="step-num">Step 1</span>
+                                    <button id="copyBtn" class="btn btn-primary full-width">
+                                        <span class="icon">📋</span> Copy Review Text
+                                    </button>
+                                </div>
+                                <div class="step-action mt-2">
+                                    <span class="step-num">Step 2</span>
+                                    <a href="#" id="googleMapsBtn" class="btn btn-submit full-width" target="_blank">
+                                        <span class="icon">📍</span> Submit the review on Google Maps
+                                    </a>
+                                </div>
+                            </div>
+
+                            <button class="btn-text prev-btn mt-4">Retry / Edit Details</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>

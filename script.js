@@ -1,10 +1,3 @@
-/**
- * GOOGLE REVIEW ENGINE PRO
- * - GSAP Animations
- * - 3D Background (Three.js)
- * - Intelligent Review Generator
- */
-
 // --- CONFIGURATION ---
 
 let acConfig = {
@@ -18,17 +11,10 @@ let acConfig = {
 let state = {
     step: 1,
     service: '',
-    professionalism: 'Outstanding',
-    communication: 'Crystal Clear',
-    timeliness: 'Record Time',
+    problem: '',
+    highlight: '',
     additionalComments: '',
     generatedReview: ''
-};
-
-const labels = {
-    professionalism: ["Good", "Professional", "Exceptional"],
-    communication: ["Responsive", "Proactive", "Flawless"],
-    timeliness: ["On Time", "Ahead of Schedule", "Record Time"]
 };
 
 // --- DOM ELEMENTS ---
@@ -160,34 +146,19 @@ function initGSAP() {
 
 // --- EVENT LISTENERS ---
 function initEventListeners() {
-    // Service selection
-    document.querySelectorAll('.shape-option[data-group="service"]').forEach(opt => {
-        opt.addEventListener('click', () => {
-            state.service = opt.dataset.value;
-            document.querySelectorAll('.shape-option[data-group="service"]').forEach(o => o.classList.remove('selected'));
-            opt.classList.add('selected');
-            gsap.fromTo(opt, { scale: 0.95 }, { scale: 1, duration: 0.3 });
-        });
-    });
+    // Selection logic for all groups
+    const groups = ['service', 'problem', 'highlight'];
+    groups.forEach(group => {
+        document.querySelectorAll(`.shape-option[data-group="${group}"]`).forEach(opt => {
+            opt.addEventListener('click', () => {
+                state[group] = opt.dataset.value;
+                document.querySelectorAll(`.shape-option[data-group="${group}"]`).forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                gsap.fromTo(opt, { scale: 0.95 }, { scale: 1, duration: 0.3 });
 
-    // Sliders
-    const sliders = ['professionalism', 'communication', 'time'];
-    sliders.forEach(id => {
-        const slider = document.getElementById(`${id}Slider`);
-        const display = document.getElementById(`${id}Display`);
-        if (slider) {
-            slider.addEventListener('input', (e) => {
-                const val = parseInt(e.target.value);
-                const category = id === 'time' ? 'timeliness' : id;
-                const label = labels[category][val - 1];
-                state[category] = label;
-                display.innerText = label;
-                updateSliderFill(slider);
-                updateLabelHighlight(id, val);
+                // Auto-advance for Step 1 and 2 if feeling proactive, but better stick to Next button for stability
             });
-            updateSliderFill(slider);
-            updateLabelHighlight(id, parseInt(slider.value));
-        }
+        });
     });
 
     // Nav
@@ -212,16 +183,6 @@ function initEventListeners() {
                 copyBtn.innerHTML = originalText;
                 copyBtn.style.background = "";
             }, 2000);
-        });
-    }
-}
-
-function updateLabelHighlight(id, val) {
-    const labelsContainer = document.getElementById(`${id}Labels`);
-    if (labelsContainer) {
-        const spans = labelsContainer.querySelectorAll('span');
-        spans.forEach((span, idx) => {
-            span.classList.toggle('active', idx + 1 === val);
         });
     }
 }
@@ -254,6 +215,8 @@ function prevStep() {
 
 function validateStep(step) {
     if (step === 1) return state.service !== '';
+    if (step === 2) return state.problem !== '';
+    if (step === 3) return state.highlight !== '';
     return true;
 }
 
@@ -280,66 +243,58 @@ function updateUI(shouldScroll = false) {
 
 function generateReview() {
     const service = state.service;
-    const city = acConfig.serviceArea || 'the area';
-    const prof = state.professionalism;
-    const comm = state.communication;
-    const time = state.timeliness;
+    const problem = state.problem;
+    const city = acConfig.serviceArea || 'the city';
+    const highlight = state.highlight;
     const extra = document.getElementById('additionalComments').value;
 
+    // SEO-Rich intro variations
     const intros = [
-        `Huge thanks to the team for the recent ${service} in ${city}.`,
-        `Just had my ${service} completed in ${city} and our home is cooling perfectly now.`,
-        `If you're looking for a reliable ${service} in ${city}, I highly recommend this crew.`,
-        `We were in need of an urgent ${service} in ${city} and they exceeded expectations.`,
-        `I am beyond impressed with the ${service} work done at our ${city} property.`,
-        `Professional and efficient ${service} right here in ${city}!`,
-        `${city} residents, if you need a professional ${service}, these are your guys.`
+        `If you're looking for the best **${service}** in **${city}**, look no further!`,
+        `I recently called for an **${service}** at my home in **${city}** and the experience was fantastic.`,
+        `Highly recommend this team for anyone in **${city}** needing professional **${service}**.`,
+        `Top-notch **${service}** service here in **${city}**. Definitely five stars!`,
+        `Best **${service}** company in **${city}**. They fixed my issue in record time.`
     ];
 
-    const profPhrases = {
-        "Good": [`The technician was very respectful and explained the issues clearly.`, `A very capable and hard-working team.`, `Everyone we dealt with was polite and professional.`],
-        "Professional": [`Their level of professionalism was top-notch from day one.`, `The technician carried themselves with true expertise and arrived with all necessary tools.`, `You can tell they take great pride in their high professional standards.`],
-        "Exceptional": [`The attention to detail and professional standards were simply elite.`, `I've never seen an AC technician work with such meticulous care for our home.`, `They treated our space with absolute respect and unmatched professionalism.`]
-    };
+    // Problem resolution variations
+    const problemPhrases = [
+        `Our unit was suffering from **${problem}**, but they diagnosed it quickly and fixed it perfectly.`,
+        `We were dealing with a frustrating **${problem}** issue, and they had it resolved within the hour.`,
+        `The technician handled the **${problem}** with total expertise. Everything is working like new now.`,
+        `I was worried about the **${problem}**, but this team made the whole repair look easy.`,
+        `They specialized in fixing **${problem}** and it shows—our AC is back to 100%.`
+    ];
 
-    const commPhrases = {
-        "Responsive": [`They were always quick to answer my questions about the system.`, `Keeping in touch was easy and they stayed responsive throughout the repair process.`, `Solid communication from start to finish.`],
-        "Proactive": [`They kept us updated at every stage of the repair, letting us know exactly what was needed.`, `I really appreciated their proactive approach to keeping us informed about the timeline.`, `The communication was consistent, transparent, and very helpful.`],
-        "Flawless": [`The communication was absolutely seamless and incredibly clear.`, `I always knew exactly what was happening thanks to their perfect status updates.`, `The easiest project communication I've ever experienced with a service team.`]
-    };
-
-    const timePhrases = {
-        "On Time": [`The system was fixed right on schedule.`, `They showed up exactly when they said they would and finished promptly.`, `Reliable scheduling and timely completion of the work.`],
-        "Ahead of Schedule": [`They actually arrived earlier than expected and finished the job in no time!`, `The repair was completed much faster than we anticipated.`, `Incredibly impressed with how quickly they got our cooling back up and running.`],
-        "Record Time": [`The speed and efficiency of the technician were truly remarkable.`, `I can't believe how fast they diagnosed and fixed the issue without cutting corners.`, `Lightning fast service that didn't compromise on quality at all.`]
+    // Highlight variations
+    const highlightPhrases = {
+        "Fast response": [`I was amazed by their **fast response** time, especially being in **${city}**.`, `They arrived much sooner than expected. Truly a **fast response**!`, `If you need someone quickly, their **fast response** is unmatched in **${city}**.`],
+        "On-time technician": [`The **on-time technician** was very professional and followed the schedule perfectly.`, `I really appreciated having an **on-time technician** who respected my schedule.`, `Consistent and reliable—the **on-time technician** made everything smooth.`],
+        "Professional service": [`You can tell they take pride in their **professional service**. Everything was spotless.`, `From start to finish, it was a completely **professional service** experience.`, `Elite **professional service** right here in **${city}**.`],
+        "Problem solved properly": [`Most importantly, the **problem was solved properly** the first time.`, `Peace of mind knowing the **problem was solved properly** by experts.`, `Quality work—the **problem was solved properly** and efficiently.`],
+        "Fair price": [`Great value and a very **fair price** for such high-quality work.`, `Hard to find such good service at such a **fair price** in **${city}**.`, `Transparent and honest—the **fair price** was exactly as quoted.`]
     };
 
     const closings = [
-        `I’d absolutely recommend them to anyone in ${city} needing AC help!`,
-        `High-quality service and a great team all around and now we're finally cool.`,
-        `We will definitely be using them for all our future HVAC needs!`,
-        `Best experience we've had with an AC service company. Five stars!`,
-        `Don't hesitate to give them a call if you want the job done right.`,
-        `A true local gem in ${city}. Highly recommended for any AC work!`,
-        `Very satisfied with the results. Thank you again for fixing our system!`
+        `I’d absolutely recommend them to anyone in **${city}** needing AC help!`,
+        `Now our home in **${city}** is perfectly cool again. Highly recommended!`,
+        `Will definitely use them for any future HVAC needs in **${city}**.`,
+        `Great team, great service, and a huge asset to the **${city}** area.`,
+        `Don't hesitate to call them if you're in **${city}** and need the job done right.`
     ];
 
-    // Pick random phrases based on slider values
+    // Build the review
     const intro = intros[Math.floor(Math.random() * intros.length)];
-
-    const profSet = profPhrases[prof];
-    const profChoice = profSet[Math.floor(Math.random() * profSet.length)];
-
-    const commSet = commPhrases[comm];
-    const commChoice = commSet[Math.floor(Math.random() * commSet.length)];
-
-    const timeSet = timePhrases[time];
-    const timeChoice = timeSet[Math.floor(Math.random() * timeSet.length)];
-
+    const prob = problemPhrases[Math.floor(Math.random() * problemPhrases.length)];
+    const hlSet = highlightPhrases[highlight];
+    const hl = hlSet[Math.floor(Math.random() * hlSet.length)];
     const closing = closings[Math.floor(Math.random() * closings.length)];
 
-    let finalReview = `${intro} ${profChoice} ${commChoice} ${timeChoice} ${extra ? extra + ' ' : ''}${closing}`;
+    let finalReview = `${intro} ${prob} ${hl} ${extra ? extra + ' ' : ''}${closing}`;
 
-    state.generatedReview = finalReview;
-    document.getElementById('reviewText').value = finalReview;
+    // Clean up markdown bolding for the final textarea output (if we want plain text for copying)
+    const plainReview = finalReview.replace(/\*\*/g, '');
+
+    state.generatedReview = plainReview;
+    document.getElementById('reviewText').value = plainReview;
 }

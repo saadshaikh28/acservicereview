@@ -194,10 +194,18 @@ function updateSliderFill(slider) {
 
 function nextStep() {
     if (validateStep(state.step)) {
-        if (state.step < 4) {
+        if (state.step === 1) {
+            if (state.service === 'AC repair') {
+                state.step = 2;
+            } else {
+                state.step = 3;
+            }
+        } else if (state.step < 4) {
             state.step++;
-            updateUI(true);
         }
+
+        updateUI(true);
+
         if (state.step === 4) {
             generateReview();
         }
@@ -207,15 +215,21 @@ function nextStep() {
 }
 
 function prevStep() {
-    if (state.step > 1) {
+    if (state.step === 3) {
+        if (state.service === 'AC repair') {
+            state.step = 2;
+        } else {
+            state.step = 1;
+        }
+    } else if (state.step > 1) {
         state.step--;
-        updateUI(true);
     }
+    updateUI(true);
 }
 
 function validateStep(step) {
     if (step === 1) return state.service !== '';
-    if (step === 2) return state.problem !== '';
+    if (step === 2) return state.service === 'AC repair' ? state.problem !== '' : true;
     if (step === 3) return state.highlight !== '';
     return true;
 }
@@ -257,40 +271,34 @@ function generateReview() {
         `Best **${service}** company in **${city}**. They fixed my issue in record time.`
     ];
 
-    // Problem resolution variations
-    const problemPhrases = [
-        `Our unit was suffering from **${problem}**, but they diagnosed it quickly and fixed it perfectly.`,
-        `We were dealing with a frustrating **${problem}** issue, and they had it resolved within the hour.`,
-        `The technician handled the **${problem}** with total expertise. Everything is working like new now.`,
-        `I was worried about the **${problem}**, but this team made the whole repair look easy.`,
-        `They specialized in fixing **${problem}** and it shows—our AC is back to 100%.`
-    ];
+    // Problem resolution variations (only if applicable)
+    let prob = "";
+    if (service === 'AC repair' && problem) {
+        const problemPhrases = [
+            `Our unit was suffering from **${problem}**, but they diagnosed it quickly and fixed it perfectly.`,
+            `We were dealing with a frustrating **${problem}** issue, and they had it resolved within the hour.`,
+            `The technician handled the **${problem}** with total expertise. Everything is working like new now.`,
+            `I was worried about the **${problem}**, but this team made the whole repair look easy.`,
+            `They specialized in fixing **${problem}** and it shows—our AC is back to 100%.`
+        ];
+        prob = problemPhrases[Math.floor(Math.random() * problemPhrases.length)] + " ";
+    } else {
+        // Generic service compliment for non-repair tasks
+        const genericPhrases = [
+            `The work was carried out with extreme care and precision.`,
+            `I am very satisfied with the quality of the work performed.`,
+            `They handled the job with total professionalism from start to finish.`,
+            `The results speak for themselves—everything is running perfectly.`,
+            `You can tell they are experts at what they do.`
+        ];
+        prob = genericPhrases[Math.floor(Math.random() * genericPhrases.length)] + " ";
+    }
 
-    // Highlight variations
-    const highlightPhrases = {
-        "Fast response": [`I was amazed by their **fast response** time, especially being in **${city}**.`, `They arrived much sooner than expected. Truly a **fast response**!`, `If you need someone quickly, their **fast response** is unmatched in **${city}**.`],
-        "On-time technician": [`The **on-time technician** was very professional and followed the schedule perfectly.`, `I really appreciated having an **on-time technician** who respected my schedule.`, `Consistent and reliable—the **on-time technician** made everything smooth.`],
-        "Professional service": [`You can tell they take pride in their **professional service**. Everything was spotless.`, `From start to finish, it was a completely **professional service** experience.`, `Elite **professional service** right here in **${city}**.`],
-        "Problem solved properly": [`Most importantly, the **problem was solved properly** the first time.`, `Peace of mind knowing the **problem was solved properly** by experts.`, `Quality work—the **problem was solved properly** and efficiently.`],
-        "Fair price": [`Great value and a very **fair price** for such high-quality work.`, `Hard to find such good service at such a **fair price** in **${city}**.`, `Transparent and honest—the **fair price** was exactly as quoted.`]
-    };
-
-    const closings = [
-        `I’d absolutely recommend them to anyone in **${city}** needing AC help!`,
-        `Now our home in **${city}** is perfectly cool again. Highly recommended!`,
-        `Will definitely use them for any future HVAC needs in **${city}**.`,
-        `Great team, great service, and a huge asset to the **${city}** area.`,
-        `Don't hesitate to call them if you're in **${city}** and need the job done right.`
-    ];
-
-    // Build the review
-    const intro = intros[Math.floor(Math.random() * intros.length)];
-    const prob = problemPhrases[Math.floor(Math.random() * problemPhrases.length)];
     const hlSet = highlightPhrases[highlight];
     const hl = hlSet[Math.floor(Math.random() * hlSet.length)];
     const closing = closings[Math.floor(Math.random() * closings.length)];
 
-    let finalReview = `${intro} ${prob} ${hl} ${extra ? extra + ' ' : ''}${closing}`;
+    let finalReview = `${intro} ${prob}${hl} ${extra ? extra + ' ' : ''}${closing}`;
 
     // Clean up markdown bolding for the final textarea output (if we want plain text for copying)
     const plainReview = finalReview.replace(/\*\*/g, '');

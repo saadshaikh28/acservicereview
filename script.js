@@ -13,7 +13,7 @@ let state = {
     service: '',
     problem: '',
     highlight: '',
-    recommendation: 'Better', // Good, Better, Best
+    recommendation: 'Very Likely', // Likely, Very Likely, Highly Recommended
     additionalComments: '',
     generatedReview: ''
 };
@@ -215,10 +215,8 @@ function initEventListeners() {
 
             // Automatically load Google Maps
             if (acConfig.googleReviewLink && acConfig.googleReviewLink !== "#") {
-                // Short delay to let user see "Copied" message
-                setTimeout(() => {
-                    window.open(acConfig.googleReviewLink, '_blank');
-                }, 500);
+                // Open immediately on user click to avoid popup blocker
+                window.open(acConfig.googleReviewLink, '_blank');
             }
 
             setTimeout(() => {
@@ -232,16 +230,19 @@ function initEventListeners() {
 function updateRecommendationSlider(val) {
     const goldenLiquid = document.getElementById('goldenLiquid');
     const labels = document.querySelectorAll('.premium-labels span');
+    const container = document.getElementById('recommendSlider');
 
     // Calculate fill percentage: 1 -> 0%, 2 -> 50%, 3 -> 100%
-    // Add small offset to perfectly align with the center of the thumb
     const fillPercent = (val - 1) * 50;
 
-    // Using a more precise calculation for the liquid fill to follow the thumb center exactly
-    // center_pos = (percent * (track_width - thumb_width)) / 100 + thumb_half_width
-    // New thumb size is 28px
+    // Use a more robust calculation by using the container's width if available, 
+    // but calc() is usually fine in modern GSAP. Let's make it cleaner.
+    const thumbSize = 28;
+    const halfThumb = thumbSize / 2;
+
+    // Width should go from halfThumb (at 0%) to (100% - halfThumb) (at 100%)
     gsap.to(goldenLiquid, {
-        width: `calc(${fillPercent}% - ${(fillPercent / 100) * 28}px + 14px)`,
+        width: `calc(${fillPercent}% - ${(fillPercent / 100) * thumbSize}px + ${halfThumb}px)`,
         duration: 0.4,
         ease: "power2.out"
     });

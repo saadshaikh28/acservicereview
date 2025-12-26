@@ -778,161 +778,6 @@ input:checked+.slider:before {
     letter-spacing: -0.02em;
 }
 
-input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 10px;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.05);
-    outline: none;
-    margin: 1.5rem 0;
-    transition: background 0.2s;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Golden Shiny Fluid Track */
-input[type="range"]::-webkit-slider-runnable-track {
-    height: 10px;
-    border-radius: 5px;
-    background: linear-gradient(to right,
-            rgba(250, 204, 21, 1) 0%,
-            rgba(250, 204, 21, 1) var(--range-percent),
-            rgba(255, 255, 255, 0.05) var(--range-percent));
-    position: relative;
-}
-
-/* Shimmer Overlay for the Fluid */
-input[type="range"]::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--range-percent);
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.4),
-            transparent);
-    background-size: 200% 100%;
-    animation: goldenFluidShine 2s infinite linear;
-    pointer-events: none;
-    z-index: 1;
-    border-radius: 5px;
-}
-
-@keyframes goldenFluidShine {
-    0% {
-        background-position: -200% 0;
-    }
-
-    100% {
-        background-position: 200% 0;
-    }
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 24px;
-    height: 24px;
-    background: #fff;
-    border: 3px solid var(--accent-color);
-    border-radius: 50%;
-    cursor: pointer;
-    margin-top: -7px;
-    box-shadow: 0 0 15px var(--accent-glow);
-    position: relative;
-    z-index: 2;
-}
-
-input[type="range"]::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
-    background: #fff;
-    border: 3px solid var(--accent-color);
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 0 15px var(--accent-glow);
-}
-
-.slider-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-    padding: 0 5px;
-}
-
-.slider-labels span {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.slider-labels span.active {
-    color: var(--accent-color);
-    text-shadow: 0 0 10px var(--accent-glow);
-    transform: scale(1.1);
-}
-
-/* Glitter Animation */
-@keyframes sparkleMove {
-    from {
-        background-position: 0 0, 0 0;
-    }
-
-    to {
-        background-position: 0 -400px, 0 0;
-    }
-}
-
-input[type="range"].glitter-slider {
-    --p: var(--range-percent, 0%);
-    --gp: var(--glitter-pos, 0px);
-    background:
-        radial-gradient(circle at 2px 2px, white 1px, transparent 1px) repeat,
-        radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.8) 1.5px, transparent 1.5px) repeat,
-        linear-gradient(to right,
-            #FEF08A 0%,
-            var(--accent-color) var(--p),
-            rgba(255, 255, 255, 0.05) var(--p),
-            rgba(255, 255, 255, 0.05) 100%);
-    background-size: 20px 20px, 35px 35px, 100% 100%;
-    background-position: var(--gp) 0, calc(var(--gp) * -0.5) 0, 0 0;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--accent-color);
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s, background 0.2s;
-    border: 3px solid white;
-    position: relative;
-    z-index: 10;
-}
-
-input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
-    background: var(--accent-hover);
-}
-
-.slider-labels {
-    display: flex;
-    justify-content: space-between;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-top: -0.5rem;
-}
 
 /* Glass Input & Textarea */
 .glass-input,
@@ -1354,14 +1199,15 @@ input[type="range"]::-webkit-slider-thumb:hover {
         0 4px 10px rgba(0, 0, 0, 0.4);
     border: 2px solid #fff;
     margin-top: 0;
-    /* Perfectly flush with the 32px height range container centered on 24px track */
+    /* Centered perfectly when runnable-track height matches thumb height */
     cursor: grab;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 10;
 }
 
 .liquid-range::-webkit-slider-runnable-track {
-    height: 14px;
+    height: 28px;
+    /* Match thumb height for perfect centering */
     background: transparent;
 }
 
@@ -1384,7 +1230,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .liquid-range::-moz-range-track {
-    height: 14px;
+    height: 28px;
     background: transparent;
 }
 

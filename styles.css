@@ -1163,19 +1163,70 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .btn-submit {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    position: relative;
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #059669 100%);
+    background-size: 200% auto;
     color: white;
-    font-weight: 800;
+    font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    letter-spacing: 0.1em;
+    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    animation: greenButtonShine 4s linear infinite;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.6),
+            transparent);
+    transform: skewX(-20deg);
+    animation: liquid-gloss 3s infinite;
 }
 
 .btn-submit:hover {
-    background: linear-gradient(135deg, #12d494 0%, #06b27d 100%);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 20px 50px rgba(16, 185, 129, 0.6),
+        inset 0 2px 0 rgba(255, 255, 255, 0.6);
+    filter: brightness(1.1);
+}
+
+.btn-submit:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+@keyframes greenButtonShine {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+@keyframes liquid-gloss {
+    0% {
+        left: -150%;
+    }
+
+    50% {
+        left: 150%;
+    }
+
+    100% {
+        left: 150%;
+    }
 }
 
 .btn-primary.full-width {
@@ -1227,6 +1278,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
         padding: 0.3rem 0.8rem;
     }
 }
+
 /* PREMIUM GOLDEN LIQUID SLIDER */
 .premium-slider-container {
     position: relative;
@@ -1253,42 +1305,70 @@ input[type="range"]::-webkit-slider-thumb:hover {
     top: 0;
     left: 0;
     height: 100%;
-    width: 50%; /* Animated via JS */
-    background: linear-gradient(90deg, #FACC15, #EAB308, #FACC15);
+    width: 50%;
+    /* Animated via JS */
+    background: linear-gradient(90deg, #FACC15, #FFF, #FACC15, #EAB308);
     background-size: 200% 100%;
-    animation: goldenFlow 3s linear infinite;
-    box-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
+    animation: goldenFlow 2s linear infinite;
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.8), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
 }
 
 @keyframes goldenFlow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
 }
 
 .liquid-range {
     position: relative;
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 40px;
     background: transparent;
     cursor: pointer;
     z-index: 2;
+    outline: none;
 }
 
 .liquid-range::-webkit-slider-thumb {
     -webkit-appearance: none;
-    height: 24px;
-    width: 24px;
+    appearance: none;
+    height: 42px;
+    width: 42px;
     border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(250, 204, 21, 1), 0 0 20px rgba(250, 204, 21, 0.4);
-    border: 3px solid #FACC15;
-    margin-top: -2px;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: radial-gradient(circle at 35% 35%, #FFF 0%, #FACC15 30%, #EAB308 100%);
+    box-shadow: 0 0 30px rgba(250, 204, 21, 0.9),
+        inset 0 2px 5px rgba(255, 255, 255, 0.8),
+        0 15px 25px rgba(0, 0, 0, 0.4);
+    border: none;
+    margin-top: -16px;
+    cursor: grab;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
 }
 
 .liquid-range::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
+    transform: scale(1.15);
+    box-shadow: 0 0 40px rgba(250, 204, 21, 1),
+        inset 0 2px 5px rgba(255, 255, 255, 0.8),
+        0 20px 35px rgba(0, 0, 0, 0.5);
+    cursor: grabbing;
+}
+
+.liquid-range::-moz-range-thumb {
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFF 0%, #FACC15 30%, #EAB308 100%);
+    box-shadow: 0 0 30px rgba(250, 204, 21, 0.9), 0 15px 25px rgba(0, 0, 0, 0.4);
+    border: none;
+    cursor: grab;
 }
 
 .premium-labels {

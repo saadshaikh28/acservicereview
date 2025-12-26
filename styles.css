@@ -1127,8 +1127,17 @@ input:checked+.slider:before {
 /* PREMIUM GOLDEN LIQUID SLIDER */
 .premium-slider-container {
     position: relative;
-    padding: 20px 0 40px;
+    padding: 1.5rem 0;
     width: 100%;
+}
+
+.slider-track-area {
+    position: relative;
+    height: 44px;
+    /* Space for the thumb/track */
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 .liquid-track {
@@ -1137,7 +1146,6 @@ input:checked+.slider:before {
     left: 0;
     width: 100%;
     height: 24px;
-    /* Increased height to contain the thumb */
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     transform: translateY(-50%);
@@ -1176,7 +1184,6 @@ input:checked+.slider:before {
     left: 0;
     width: 100%;
     height: 32px;
-    /* Slightly larger than track for better touch target */
     background: transparent;
     cursor: pointer;
     z-index: 5;
@@ -1237,7 +1244,7 @@ input:checked+.slider:before {
 .premium-labels {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: 5px;
     padding: 0 5px;
 }
 

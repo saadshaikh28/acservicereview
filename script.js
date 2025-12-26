@@ -13,7 +13,7 @@ let state = {
     service: '',
     problem: '',
     highlight: '',
-    recommendation: 'Very Likely', // Likely, Very Likely, Highly Recommended
+    recommendation: 'Likely', // Likely, Very Likely, Highly Recommended
     additionalComments: '',
     generatedReview: ''
 };
@@ -191,7 +191,7 @@ function initEventListeners() {
         });
 
         // Init
-        updateRecommendationSlider(2);
+        updateRecommendationSlider(1);
     }
 
     // Nav
@@ -213,11 +213,6 @@ function initEventListeners() {
             copyBtn.innerHTML = "✅ Copied!";
             copyBtn.style.background = "#10b981";
 
-            // Automatically load Google Maps
-            if (acConfig.googleReviewLink && acConfig.googleReviewLink !== "#") {
-                // Open immediately on user click to avoid popup blocker
-                window.open(acConfig.googleReviewLink, '_blank');
-            }
 
             setTimeout(() => {
                 copyBtn.innerHTML = originalText;

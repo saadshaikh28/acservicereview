@@ -212,6 +212,15 @@ function initEventListeners() {
             const originalText = copyBtn.innerHTML;
             copyBtn.innerHTML = "✅ Copied!";
             copyBtn.style.background = "#10b981";
+
+            // Automatically load Google Maps
+            if (acConfig.googleReviewLink && acConfig.googleReviewLink !== "#") {
+                // Short delay to let user see "Copied" message
+                setTimeout(() => {
+                    window.open(acConfig.googleReviewLink, '_blank');
+                }, 500);
+            }
+
             setTimeout(() => {
                 copyBtn.innerHTML = originalText;
                 copyBtn.style.background = "";
@@ -230,8 +239,9 @@ function updateRecommendationSlider(val) {
 
     // Using a more precise calculation for the liquid fill to follow the thumb center exactly
     // center_pos = (percent * (track_width - thumb_width)) / 100 + thumb_half_width
+    // New thumb size is 28px
     gsap.to(goldenLiquid, {
-        width: `calc(${fillPercent}% - ${(fillPercent / 100) * 44}px + 22px)`,
+        width: `calc(${fillPercent}% - ${(fillPercent / 100) * 28}px + 14px)`,
         duration: 0.4,
         ease: "power2.out"
     });
@@ -333,9 +343,9 @@ function generateReview() {
     }
 
     const recPhrases = {
-        "Good": [`Everything was solid and I'd recommend them for sure.`, `Reliable service and a good team.`],
-        "Better": [`One of the better experiences I've had with home services in **${city}**. Highly recommended!`, `I'll definitely be telling my friends about this company.`],
-        "Best": [`Truly the best AC service company in all of **${city}**, without a doubt!`, `Absolutely perfect service. The gold standard for HVAC maintenance and repair.`]
+        "Likely": [`Everything was solid and I'd recommend them for sure.`, `Reliable service and a good team.`],
+        "Very Likely": [`One of the better experiences I've had with home services in **${city}**. Highly recommended!`, `I'll definitely be telling my friends about this company.`],
+        "Highly Recommended": [`Truly the best AC service company in all of **${city}**, without a doubt!`, `Absolutely perfect service. The gold standard for HVAC maintenance and repair.`]
     };
 
     const highlightPhrases = {

@@ -1291,13 +1291,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
     top: 50%;
     left: 0;
     width: 100%;
-    height: 12px;
+    height: 14px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     transform: translateY(-50%);
     overflow: hidden;
-    border: 1px solid rgba(250, 204, 21, 0.2);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .liquid-fill {
@@ -1339,22 +1339,28 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .liquid-range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    height: 42px;
-    width: 42px;
+    height: 44px;
+    width: 44px;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, #FFF 0%, #FACC15 30%, #EAB308 100%);
     box-shadow: 0 0 30px rgba(250, 204, 21, 0.9),
         inset 0 2px 5px rgba(255, 255, 255, 0.8),
         0 15px 25px rgba(0, 0, 0, 0.4);
     border: none;
-    margin-top: -16px;
+    margin-top: -15px;
+    /* (Track 14px / 2) - (Thumb 44px / 2) = -15px */
     cursor: grab;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 10;
 }
 
+.liquid-range::-webkit-slider-runnable-track {
+    height: 14px;
+    background: transparent;
+}
+
 .liquid-range::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
+    transform: scale(1.1);
     box-shadow: 0 0 40px rgba(250, 204, 21, 1),
         inset 0 2px 5px rgba(255, 255, 255, 0.8),
         0 20px 35px rgba(0, 0, 0, 0.5);
@@ -1362,13 +1368,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .liquid-range::-moz-range-thumb {
-    height: 38px;
-    width: 38px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, #FFF 0%, #FACC15 30%, #EAB308 100%);
     box-shadow: 0 0 30px rgba(250, 204, 21, 0.9), 0 15px 25px rgba(0, 0, 0, 0.4);
     border: none;
     cursor: grab;
+}
+
+.liquid-range::-moz-range-track {
+    height: 14px;
+    background: transparent;
 }
 
 .premium-labels {

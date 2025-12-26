@@ -179,6 +179,17 @@ function initEventListeners() {
             const val = parseInt(e.target.value);
             updateRecommendationSlider(val);
         });
+
+        // Add label click logic
+        const labels = document.querySelectorAll('.premium-labels span');
+        labels.forEach(lbl => {
+            lbl.addEventListener('click', () => {
+                const val = parseInt(lbl.dataset.val);
+                recommendSlider.value = val;
+                updateRecommendationSlider(val);
+            });
+        });
+
         // Init
         updateRecommendationSlider(2);
     }
@@ -214,8 +225,16 @@ function updateRecommendationSlider(val) {
     const labels = document.querySelectorAll('.premium-labels span');
 
     // Calculate fill percentage: 1 -> 0%, 2 -> 50%, 3 -> 100%
+    // Add small offset to perfectly align with the center of the thumb
     const fillPercent = (val - 1) * 50;
-    gsap.to(goldenLiquid, { width: `${fillPercent}%`, duration: 0.4, ease: "power2.out" });
+
+    // Using a more precise calculation for the liquid fill to follow the thumb center exactly
+    // center_pos = (percent * (track_width - thumb_width)) / 100 + thumb_half_width
+    gsap.to(goldenLiquid, {
+        width: `calc(${fillPercent}% - ${(fillPercent / 100) * 44}px + 22px)`,
+        duration: 0.4,
+        ease: "power2.out"
+    });
 
     // Update labels
     labels.forEach(lbl => {

@@ -13,6 +13,7 @@ let state = {
     service: '',
     problem: '',
     highlight: '',
+    recommendation: 'Better', // Good, Better, Best
     additionalComments: '',
     generatedReview: ''
 };
@@ -156,10 +157,31 @@ function initEventListeners() {
                 opt.classList.add('selected');
                 gsap.fromTo(opt, { scale: 0.95 }, { scale: 1, duration: 0.3 });
 
-                // Auto-advance for Step 1 and 2 if feeling proactive, but better stick to Next button for stability
+                // Conditional reveal for Help Options in Step 1
+                if (group === 'service') {
+                    const problemContainer = document.getElementById('problemFixedContainer');
+                    if (state.service === 'AC repair') {
+                        problemContainer.style.display = 'block';
+                        gsap.to(problemContainer, { height: 'auto', opacity: 1, duration: 0.5, ease: "power2.out" });
+                    } else {
+                        gsap.to(problemContainer, { height: 0, opacity: 0, duration: 0.3, onComplete: () => problemContainer.style.display = 'none' });
+                        state.problem = ''; // Clear problem if not repair
+                    }
+                }
             });
         });
     });
+
+    // Premium Golden Slider Logic
+    const recommendSlider = document.getElementById('recommendSlider');
+    if (recommendSlider) {
+        recommendSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            updateRecommendationSlider(val);
+        });
+        // Init
+        updateRecommendationSlider(2);
+    }
 
     // Nav
     document.querySelectorAll('.next-btn').forEach(btn => {
@@ -187,25 +209,30 @@ function initEventListeners() {
     }
 }
 
-function updateSliderFill(slider) {
-    const percent = (slider.value - slider.min) * 100 / (slider.max - slider.min);
-    slider.style.setProperty('--range-percent', percent + '%');
+function updateRecommendationSlider(val) {
+    const goldenLiquid = document.getElementById('goldenLiquid');
+    const labels = document.querySelectorAll('.premium-labels span');
+
+    // Calculate fill percentage: 1 -> 0%, 2 -> 50%, 3 -> 100%
+    const fillPercent = (val - 1) * 50;
+    gsap.to(goldenLiquid, { width: `${fillPercent}%`, duration: 0.4, ease: "power2.out" });
+
+    // Update labels
+    labels.forEach(lbl => {
+        const lblVal = parseInt(lbl.dataset.val);
+        lbl.classList.toggle('active', lblVal === val);
+        if (lblVal === val) {
+            state.recommendation = lbl.innerText;
+        }
+    });
 }
 
 function nextStep() {
     if (validateStep(state.step)) {
-        if (state.step === 1) {
-            if (state.service === 'AC repair') {
-                state.step = 2;
-            } else {
-                state.step = 3;
-            }
-        } else if (state.step < 4) {
+        if (state.step < 4) {
             state.step++;
         }
-
         updateUI(true);
-
         if (state.step === 4) {
             generateReview();
         }
@@ -215,22 +242,19 @@ function nextStep() {
 }
 
 function prevStep() {
-    if (state.step === 3) {
-        if (state.service === 'AC repair') {
-            state.step = 2;
-        } else {
-            state.step = 1;
-        }
-    } else if (state.step > 1) {
+    if (state.step > 1) {
         state.step--;
     }
     updateUI(true);
 }
 
 function validateStep(step) {
-    if (step === 1) return state.service !== '';
-    if (step === 2) return state.service === 'AC repair' ? state.problem !== '' : true;
-    if (step === 3) return state.highlight !== '';
+    if (step === 1) {
+        if (state.service === '') return false;
+        if (state.service === 'AC repair' && state.problem === '') return false;
+        return true;
+    }
+    if (step === 2) return state.highlight !== '';
     return true;
 }
 
@@ -260,9 +284,9 @@ function generateReview() {
     const problem = state.problem;
     const city = acConfig.serviceArea || 'the city';
     const highlight = state.highlight;
+    const rec = state.recommendation;
     const extra = document.getElementById('additionalComments').value;
 
-    // SEO-Rich intro variations
     const intros = [
         `If you're looking for the best **${service}** in **${city}**, look no further!`,
         `I recently called for an **${service}** at my home in **${city}** and the experience was fantastic.`,
@@ -271,38 +295,52 @@ function generateReview() {
         `Best **${service}** company in **${city}**. They fixed my issue in record time.`
     ];
 
-    // Problem resolution variations (only if applicable)
-    let prob = "";
+    let probDetail = "";
     if (service === 'AC repair' && problem) {
         const problemPhrases = [
             `Our unit was suffering from **${problem}**, but they diagnosed it quickly and fixed it perfectly.`,
             `We were dealing with a frustrating **${problem}** issue, and they had it resolved within the hour.`,
             `The technician handled the **${problem}** with total expertise. Everything is working like new now.`,
-            `I was worried about the **${problem}**, but this team made the whole repair look easy.`,
-            `They specialized in fixing **${problem}** and it shows—our AC is back to 100%.`
+            `I was worried about the **${problem}**, but this team made the whole repair look easy.`
         ];
-        prob = problemPhrases[Math.floor(Math.random() * problemPhrases.length)] + " ";
+        probDetail = problemPhrases[Math.floor(Math.random() * problemPhrases.length)] + " ";
     } else {
-        // Generic service compliment for non-repair tasks
         const genericPhrases = [
             `The work was carried out with extreme care and precision.`,
             `I am very satisfied with the quality of the work performed.`,
-            `They handled the job with total professionalism from start to finish.`,
-            `The results speak for themselves—everything is running perfectly.`,
-            `You can tell they are experts at what they do.`
+            `They handled the job with total professionalism from start to finish.`
         ];
-        prob = genericPhrases[Math.floor(Math.random() * genericPhrases.length)] + " ";
+        probDetail = genericPhrases[Math.floor(Math.random() * genericPhrases.length)] + " ";
     }
 
-    const hlSet = highlightPhrases[highlight];
-    const hl = hlSet[Math.floor(Math.random() * hlSet.length)];
+    const recPhrases = {
+        "Good": [`Everything was solid and I'd recommend them for sure.`, `Reliable service and a good team.`],
+        "Better": [`One of the better experiences I've had with home services in **${city}**. Highly recommended!`, `I'll definitely be telling my friends about this company.`],
+        "Best": [`Truly the best AC service company in all of **${city}**, without a doubt!`, `Absolutely perfect service. The gold standard for HVAC maintenance and repair.`]
+    };
+
+    const highlightPhrases = {
+        "Fast response": [`I was amazed by their **fast response** time, especially being in **${city}**.`][0],
+        "On-time technician": [`The **on-time technician** was very professional and followed the schedule perfectly.`][0],
+        "Professional service": [`You can tell they take pride in their **professional service**. Everything was spotless.`][0],
+        "Problem solved properly": [`Most importantly, the **problem was solved properly** the first time.`][0],
+        "Fair price": [`Great value and a very **fair price** for such high-quality work in **${city}**.`][0]
+    };
+
+    const closings = [
+        `I’d absolutely recommend them to anyone in **${city}** needing AC help!`,
+        `Now our home in **${city}** is perfectly cool again.`,
+        `Will definitely use them for any future HVAC needs.`
+    ];
+
+    const intro = intros[Math.floor(Math.random() * intros.length)];
+    const recSet = recPhrases[rec];
+    const recChoice = recSet[Math.floor(Math.random() * recSet.length)];
     const closing = closings[Math.floor(Math.random() * closings.length)];
 
-    let finalReview = `${intro} ${prob}${hl} ${extra ? extra + ' ' : ''}${closing}`;
+    let finalReview = `${intro} ${probDetail}${highlightPhrases[highlight]} ${recChoice} ${extra ? extra + ' ' : ''}${closing}`;
 
-    // Clean up markdown bolding for the final textarea output (if we want plain text for copying)
     const plainReview = finalReview.replace(/\*\*/g, '');
-
     state.generatedReview = plainReview;
     document.getElementById('reviewText').value = plainReview;
 }

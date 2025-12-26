@@ -1227,3 +1227,94 @@ input[type="range"]::-webkit-slider-thumb:hover {
         padding: 0.3rem 0.8rem;
     }
 }
+/* PREMIUM GOLDEN LIQUID SLIDER */
+.premium-slider-container {
+    position: relative;
+    padding: 20px 0 40px;
+    width: 100%;
+}
+
+.liquid-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transform: translateY(-50%);
+    overflow: hidden;
+    border: 1px solid rgba(250, 204, 21, 0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.liquid-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%; /* Animated via JS */
+    background: linear-gradient(90deg, #FACC15, #EAB308, #FACC15);
+    background-size: 200% 100%;
+    animation: goldenFlow 3s linear infinite;
+    box-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
+}
+
+@keyframes goldenFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.liquid-range {
+    position: relative;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 40px;
+    background: transparent;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.liquid-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(250, 204, 21, 1), 0 0 20px rgba(250, 204, 21, 0.4);
+    border: 3px solid #FACC15;
+    margin-top: -2px;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.liquid-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.premium-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding: 0 5px;
+}
+
+.premium-labels span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.premium-labels span.active {
+    color: #FACC15;
+    text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+    transform: translateY(-2px) scale(1.1);
+}
+
+.sub-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 12px;
+    display: block;
+}

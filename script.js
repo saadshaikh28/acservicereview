@@ -434,7 +434,7 @@ function checkTour() {
 function startTour() {
     const overlay = document.getElementById('tour-overlay');
     overlay.style.display = 'block';
-    overlay.style.pointerEvents = 'auto'; // Block interaction with back during tour
+    overlay.style.pointerEvents = 'none'; // Allow interaction with back during tour
 
     gsap.to(overlay, { opacity: 1, duration: 0.5 });
     showTourStep(0);
@@ -470,7 +470,7 @@ function showTourStep(index) {
     const tooltip = document.getElementById('tour-tooltip');
 
     overlay.style.display = 'block';
-    overlay.style.pointerEvents = 'auto'; // Block interaction with back during tour
+    overlay.style.pointerEvents = 'none'; // Allow interaction with back during tour
 
     // Ensure target visible
     const targetEl = document.querySelector(step.target);

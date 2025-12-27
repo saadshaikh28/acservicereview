@@ -1284,15 +1284,16 @@ input:checked+.slider:before {
 .tour-highlight {
     position: absolute;
     border-radius: 12px;
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 0 4px var(--accent-color), 0 0 20px var(--accent-glow);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 10000;
-    pointer-events: auto;
+    pointer-events: none;
+    /* Allow interaction with the element behind it */
 }
 
 .tour-tooltip {
     position: absolute;
-    width: 320px;
+    width: 340px;
     padding: 24px;
     z-index: 10001;
     pointer-events: auto;
@@ -1302,7 +1303,11 @@ input:checked+.slider:before {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    border: 1px solid rgba(0, 242, 255, 0.3) !important;
+    background: rgba(15, 23, 42, 0.6) !important;
+    /* Higher transparency */
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(0, 242, 255, 0.4) !important;
+    border-radius: 20px;
 }
 
 .tour-tooltip.active {

@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initGSAP();
     initEventListeners();
     updateUI(false);
+
+    // Start Tour if first time
+    setTimeout(checkTour, 1500);
 });
 
 function loadACConfig() {
@@ -44,7 +47,7 @@ function loadACConfig() {
     }
 
     if (!clientName || isLocal) {
-        clientName = clientName || 'acservicereview';
+        clientName = clientName || 'techniciansaad';
     }
 
     const configFile = `configs/${clientName}.json`;
@@ -368,4 +371,164 @@ function generateReview() {
     const plainReview = finalReview.replace(/\*\*/g, '');
     state.generatedReview = plainReview;
     document.getElementById('reviewText').value = plainReview;
+}
+
+// --- WEBSITE TOUR LOGIC ---
+const tourSteps = () => [
+    {
+        title: `Welcome to ${acConfig.companyName}`,
+        description: `Stop missing out on reviews. This engine makes it so easy for your clients in ${acConfig.serviceArea} that they can't say no.`,
+        target: "#mainHeroTitle",
+        pos: "bottom"
+    },
+    {
+        title: "Smart Keyword Capture",
+        description: "We don't just ask for 'good service'. We capture details like specific repairs and reliability that Google loves for SEO.",
+        target: ".shape-grid",
+        pos: "bottom"
+    },
+    {
+        title: "Zero Friction Experience",
+        description: "The premium slider captures sentiment effortlessly. It feels so good to use that clients actually enjoy the process.",
+        target: "#recommendSliderContainer",
+        pos: "top"
+    },
+    {
+        title: "Skyrocket Your Reviews",
+        description: `Once they click 'Submit', they are taken directly to your Google profile. Higher volume, better quality, more business for ${acConfig.name}.`,
+        target: ".action-steps",
+        pos: "top"
+    }
+];
+
+let currentTourStep = 0;
+
+function checkTour() {
+    // Run tour every time as requested
+    startTour();
+}
+
+function startTour() {
+    const overlay = document.getElementById('tour-overlay');
+    overlay.style.display = 'block';
+    gsap.to(overlay, { opacity: 1, duration: 0.5 });
+    showTourStep(0);
+
+    // Remove existing listeners if any to prevent duplicates
+    const nextBtn = document.getElementById('next-tour');
+    const prevBtn = document.getElementById('prev-tour');
+    const skipBtn = document.getElementById('skip-tour');
+
+    nextBtn.replaceWith(nextBtn.cloneNode(true));
+    prevBtn.replaceWith(prevBtn.cloneNode(true));
+    skipBtn.replaceWith(skipBtn.cloneNode(true));
+
+    document.getElementById('next-tour').addEventListener('click', nextTourStep);
+    document.getElementById('prev-tour').addEventListener('click', prevTourStep);
+    document.getElementById('skip-tour').addEventListener('click', endTour);
+}
+
+function showTourStep(index) {
+    currentTourStep = index;
+    const steps = tourSteps();
+    const step = steps[index];
+    const targetEl = document.querySelector(step.target);
+    const highlight = document.getElementById('tour-highlight');
+    const tooltip = document.getElementById('tour-tooltip');
+
+    if (!targetEl) return;
+
+    // Update Content
+    document.getElementById('tour-title').innerText = step.title;
+    document.getElementById('tour-description').innerText = step.description;
+    document.getElementById('tour-progress-fill').style.width = `${((index + 1) / steps.length) * 100}%`;
+
+    // Nav Buttons
+    document.getElementById('prev-tour').style.display = index === 0 ? 'none' : 'block';
+    document.getElementById('next-tour').innerText = index === steps.length - 1 ? 'Finish' : 'Next';
+
+    // Scroll to target with offset for tooltip
+    const isMobile = window.innerWidth <= 768;
+    const scrollOffset = isMobile ? 150 : 200;
+
+    const targetRect = targetEl.getBoundingClientRect();
+    const absoluteTargetTop = targetRect.top + window.scrollY;
+    window.scrollTo({
+        top: absoluteTargetTop - scrollOffset,
+        behavior: 'smooth'
+    });
+
+    // Highlight Target
+    const rect = targetEl.getBoundingClientRect();
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+
+    gsap.to(highlight, {
+        top: rect.top + scrollY - 8,
+        left: rect.left + scrollX - 8,
+        width: rect.width + 16,
+        height: rect.height + 16,
+        duration: 0.5,
+        ease: "power2.inOut"
+    });
+
+    // Position Tooltip
+    tooltip.classList.remove('active');
+    tooltip.setAttribute('data-pos', step.pos);
+
+    setTimeout(() => {
+        const viewportWidth = window.innerWidth;
+        const tooltipWidth = tooltip.offsetWidth;
+
+        let tTop, tLeft;
+
+        if (isMobile) {
+            // Center on mobile
+            tLeft = (viewportWidth - tooltipWidth) / 2;
+            if (step.pos === 'bottom') {
+                tTop = rect.bottom + scrollY + 20;
+            } else {
+                tTop = rect.top + scrollY - tooltip.offsetHeight - 20;
+            }
+        } else {
+            if (step.pos === 'bottom') {
+                tTop = rect.bottom + scrollY + 20;
+                tLeft = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
+            } else if (step.pos === 'top') {
+                tTop = rect.top + scrollY - tooltip.offsetHeight - 20;
+                tLeft = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
+            }
+            // Keep in bounds
+            tLeft = Math.max(10, Math.min(tLeft, viewportWidth - tooltipWidth - 10));
+        }
+
+        tooltip.style.top = `${tTop}px`;
+        tooltip.style.left = `${tLeft}px`;
+        tooltip.classList.add('active');
+    }, 150);
+}
+
+function nextTourStep() {
+    const steps = tourSteps();
+    if (currentTourStep < steps.length - 1) {
+        showTourStep(currentTourStep + 1);
+    } else {
+        endTour();
+    }
+}
+
+function prevTourStep() {
+    if (currentTourStep > 0) {
+        showTourStep(currentTourStep - 1);
+    }
+}
+
+function endTour() {
+    const overlay = document.getElementById('tour-overlay');
+    gsap.to(overlay, {
+        opacity: 0, duration: 0.5, onComplete: () => {
+            overlay.style.display = 'none';
+            localStorage.setItem('hasSeenTour', 'true');
+        }
+    });
 }

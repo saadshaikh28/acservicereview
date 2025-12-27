@@ -1279,7 +1279,6 @@ input:checked+.slider:before {
     height: 100%;
     z-index: 9999;
     pointer-events: none;
-    overflow: hidden;
 }
 
 .tour-highlight {

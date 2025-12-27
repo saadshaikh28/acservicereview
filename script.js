@@ -199,7 +199,15 @@ function initEventListeners() {
 
     // Nav
     document.querySelectorAll('.next-btn').forEach(btn => {
-        btn.addEventListener('click', () => nextStep());
+        btn.addEventListener('click', () => {
+            if (validateStep(state.step)) {
+                nextStep();
+                // Resume tour after magic delay to ensure UI updated
+                setTimeout(() => resumeTourAfterStep(state.step), 600);
+            } else {
+                gsap.to(`.wizard-step[data-step="${state.step}"]`, { x: 10, duration: 0.1, yoyo: true, repeat: 5 });
+            }
+        });
     });
 
     document.querySelectorAll('.prev-btn').forEach(btn => {
@@ -256,16 +264,12 @@ function updateRecommendationSlider(val) {
 }
 
 function nextStep() {
-    if (validateStep(state.step)) {
-        if (state.step < 4) {
-            state.step++;
-        }
-        updateUI(true);
-        if (state.step === 4) {
-            generateReview();
-        }
-    } else {
-        gsap.to(`.wizard-step[data-step="${state.step}"]`, { x: 10, duration: 0.1, yoyo: true, repeat: 5 });
+    if (state.step < 4) {
+        state.step++;
+    }
+    updateUI(true);
+    if (state.step === 4) {
+        generateReview();
     }
 }
 
@@ -376,141 +380,188 @@ function generateReview() {
 // --- WEBSITE TOUR LOGIC ---
 const tourSteps = () => [
     {
-        title: `Welcome to ${acConfig.companyName}`,
-        description: `Stop missing out on reviews. This engine makes it so easy for your clients in ${acConfig.serviceArea} that they can't say no.`,
+        title: `Welcome to the Growth Engine`,
+        description: `Stop settling for "good" reviews. This system is designed to turn every customer for ${acConfig.companyName} into a powerful SEO asset. Ready to see the loop of exponential growth?`,
         target: "#mainHeroTitle",
-        pos: "bottom"
+        pos: "bottom",
+        buttonText: "Let's Start"
     },
     {
-        title: "Smart Keyword Capture",
-        description: "We don't just ask for 'good service'. We capture details like specific repairs and reliability that Google loves for SEO.",
+        title: "The SEO Keyword Capture",
+        description: `This is where we win. By selecting specific services, we capture high-value keywords (like "AC Repair" in ${acConfig.serviceArea}) that Google prioritizes for rankings. \n\n**Select a service and see it in action!**`,
         target: ".shape-grid",
-        pos: "bottom"
+        pos: "bottom",
+        buttonText: "Proceed to Form",
+        pause: true
     },
     {
-        title: "Zero Friction Experience",
-        description: "The premium slider captures sentiment effortlessly. It feels so good to use that clients actually enjoy the process.",
-        target: "#recommendSliderContainer",
-        pos: "top"
+        title: "Trust & Authority Loops",
+        description: `Now for Section 2. Highlighting specific wins builds "Trust Authority." This data turns into a mini-sales pitch for your next customer, making it 5x more likely they'll book with ${acConfig.name}.`,
+        target: ".shape-grid",
+        pos: "bottom",
+        buttonText: "Select Highlights",
+        pause: true
     },
     {
-        title: "Skyrocket Your Reviews",
-        description: `Once they click 'Submit', they are taken directly to your Google profile. Higher volume, better quality, more business for ${acConfig.name}.`,
+        title: "The Optionality Factor",
+        description: `Section 3 is the final touch. Additional comments are optional but absolute GOLD for SEO. Even a small note adds massive ranking weight while competitors stay stagnant.`,
+        target: ".glass-textarea",
+        pos: "top",
+        buttonText: "Almost Done",
+        pause: true
+    },
+    {
+        title: "The Exponential Growth Loop",
+        description: `Behold! A perfectly optimized, keyword-rich review. \n\n1. **High-Volume SEO Reviews** \n2. **Dominate Google Maps** \n3. **More Customers** \n4. **More Reviews.** \n\nCopy, Click, and let ${acConfig.companyName} rank to the top!`,
         target: ".action-steps",
-        pos: "top"
+        pos: "top",
+        buttonText: "Finish Tour"
     }
 ];
 
 let currentTourStep = 0;
+let isTourPaused = false;
 
 function checkTour() {
-    // Run tour every time as requested
     startTour();
 }
 
 function startTour() {
     const overlay = document.getElementById('tour-overlay');
     overlay.style.display = 'block';
+    overlay.style.pointerEvents = 'auto'; // Block interaction with back during tour
+
     gsap.to(overlay, { opacity: 1, duration: 0.5 });
     showTourStep(0);
 
-    // Remove existing listeners if any to prevent duplicates
+    // Cleanup and re-add listeners
+    setupTourListeners();
+    window.addEventListener('scroll', updateTourPositions);
+}
+
+function setupTourListeners() {
     const nextBtn = document.getElementById('next-tour');
     const prevBtn = document.getElementById('prev-tour');
     const skipBtn = document.getElementById('skip-tour');
 
-    nextBtn.replaceWith(nextBtn.cloneNode(true));
-    prevBtn.replaceWith(prevBtn.cloneNode(true));
-    skipBtn.replaceWith(skipBtn.cloneNode(true));
+    const newNext = nextBtn.cloneNode(true);
+    const newPrev = prevBtn.cloneNode(true);
+    const newSkip = skipBtn.cloneNode(true);
 
-    document.getElementById('next-tour').addEventListener('click', nextTourStep);
-    document.getElementById('prev-tour').addEventListener('click', prevTourStep);
-    document.getElementById('skip-tour').addEventListener('click', endTour);
+    nextBtn.replaceWith(newNext);
+    prevBtn.replaceWith(newPrev);
+    skipBtn.replaceWith(newSkip);
+
+    newNext.addEventListener('click', nextTourStep);
+    newPrev.addEventListener('click', prevTourStep);
+    newSkip.addEventListener('click', endTour);
 }
 
 function showTourStep(index) {
     currentTourStep = index;
     const steps = tourSteps();
     const step = steps[index];
+    const overlay = document.getElementById('tour-overlay');
+    const tooltip = document.getElementById('tour-tooltip');
+
+    overlay.style.display = 'block';
+    overlay.style.pointerEvents = 'auto'; // Block interaction with back during tour
+
+    // Ensure target visible
+    const targetEl = document.querySelector(step.target);
+    if (targetEl) {
+        const parentStep = targetEl.closest('.wizard-step');
+        if (parentStep && !parentStep.classList.contains('active')) {
+            document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+            parentStep.classList.add('active');
+            parentStep.style.opacity = "1";
+            parentStep.style.display = "block";
+        }
+    }
+
+    // Update Content
+    document.getElementById('tour-title').innerText = step.title;
+    document.getElementById('tour-description').innerHTML = step.description.replace(/\n/g, '<br>');
+    document.getElementById('tour-progress-fill').style.width = `${((index + 1) / steps.length) * 100}%`;
+
+    // Nav Buttons
+    const nextBtn = document.getElementById('next-tour');
+    document.getElementById('prev-tour').style.display = index === 0 ? 'none' : 'block';
+    nextBtn.innerText = step.buttonText || (index === steps.length - 1 ? 'Finish' : 'Next');
+
+    updateTourPositions();
+
+    // Scroll to target
+    const isMobile = window.innerWidth <= 768;
+    const scrollOffset = isMobile ? 150 : 200;
+    const rect = targetEl.getBoundingClientRect();
+    window.scrollTo({
+        top: rect.top + window.scrollY - scrollOffset,
+        behavior: 'smooth'
+    });
+}
+
+function updateTourPositions() {
+    if (document.getElementById('tour-overlay').style.display === 'none') return;
+
+    const steps = tourSteps();
+    const step = steps[currentTourStep];
     const targetEl = document.querySelector(step.target);
     const highlight = document.getElementById('tour-highlight');
     const tooltip = document.getElementById('tour-tooltip');
 
     if (!targetEl) return;
 
-    // Update Content
-    document.getElementById('tour-title').innerText = step.title;
-    document.getElementById('tour-description').innerText = step.description;
-    document.getElementById('tour-progress-fill').style.width = `${((index + 1) / steps.length) * 100}%`;
-
-    // Nav Buttons
-    document.getElementById('prev-tour').style.display = index === 0 ? 'none' : 'block';
-    document.getElementById('next-tour').innerText = index === steps.length - 1 ? 'Finish' : 'Next';
-
-    // Scroll to target with offset for tooltip
-    const isMobile = window.innerWidth <= 768;
-    const scrollOffset = isMobile ? 150 : 200;
-
-    const targetRect = targetEl.getBoundingClientRect();
-    const absoluteTargetTop = targetRect.top + window.scrollY;
-    window.scrollTo({
-        top: absoluteTargetTop - scrollOffset,
-        behavior: 'smooth'
-    });
-
-    // Highlight Target
     const rect = targetEl.getBoundingClientRect();
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
+    const isMobile = window.innerWidth <= 768;
 
-    gsap.to(highlight, {
-        top: rect.top + scrollY - 8,
-        left: rect.left + scrollX - 8,
-        width: rect.width + 16,
-        height: rect.height + 16,
-        duration: 0.5,
-        ease: "power2.inOut"
-    });
-
-    // Position Tooltip
-    tooltip.classList.remove('active');
+    // Set position attribute for CSS margins
     tooltip.setAttribute('data-pos', step.pos);
 
-    setTimeout(() => {
-        const viewportWidth = window.innerWidth;
-        const tooltipWidth = tooltip.offsetWidth;
+    // Viewport relative coordinates for highlight
+    gsap.to(highlight, {
+        top: rect.top - 8,
+        left: rect.left - 8,
+        width: rect.width + 16,
+        height: rect.height + 16,
+        duration: 0.2, // Fast update to feel responsive
+        ease: "power2.out"
+    });
 
-        let tTop, tLeft;
+    // Tooltip position (centered or relative to target)
+    const viewportWidth = window.innerWidth;
+    const tooltipWidth = tooltip.offsetWidth;
+    let tTop, tLeft;
 
-        if (isMobile) {
-            // Center on mobile
-            tLeft = (viewportWidth - tooltipWidth) / 2;
-            if (step.pos === 'bottom') {
-                tTop = rect.bottom + scrollY + 20;
-            } else {
-                tTop = rect.top + scrollY - tooltip.offsetHeight - 20;
-            }
+    if (isMobile) {
+        tLeft = (viewportWidth - tooltipWidth) / 2;
+        if (step.pos === 'bottom') {
+            tTop = rect.bottom + 20;
         } else {
-            if (step.pos === 'bottom') {
-                tTop = rect.bottom + scrollY + 20;
-                tLeft = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
-            } else if (step.pos === 'top') {
-                tTop = rect.top + scrollY - tooltip.offsetHeight - 20;
-                tLeft = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
-            }
-            // Keep in bounds
-            tLeft = Math.max(10, Math.min(tLeft, viewportWidth - tooltipWidth - 10));
+            tTop = rect.top - tooltip.offsetHeight - 20;
         }
+    } else {
+        if (step.pos === 'bottom') {
+            tTop = rect.bottom + 20;
+            tLeft = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+        } else if (step.pos === 'top') {
+            tTop = rect.top - tooltip.offsetHeight - 20;
+            tLeft = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+        }
+        tLeft = Math.max(10, Math.min(tLeft, viewportWidth - tooltipWidth - 10));
+    }
 
-        tooltip.style.top = `${tTop}px`;
-        tooltip.style.left = `${tLeft}px`;
-        tooltip.classList.add('active');
-    }, 150);
+    tooltip.style.top = `${tTop}px`;
+    tooltip.style.left = `${tLeft}px`;
 }
 
 function nextTourStep() {
     const steps = tourSteps();
-    if (currentTourStep < steps.length - 1) {
+    const step = steps[currentTourStep];
+
+    if (step.pause) {
+        pauseTour();
+    } else if (currentTourStep < steps.length - 1) {
         showTourStep(currentTourStep + 1);
     } else {
         endTour();
@@ -523,12 +574,50 @@ function prevTourStep() {
     }
 }
 
+function pauseTour() {
+    const overlay = document.getElementById('tour-overlay');
+    isTourPaused = true;
+    gsap.to(overlay, {
+        opacity: 0, duration: 0.4, onComplete: () => {
+            overlay.style.display = 'none';
+            overlay.style.pointerEvents = 'none';
+        }
+    });
+}
+
+function resumeTourAfterStep(completedStep) {
+    if (!isTourPaused) return;
+
+    // Mapping wizard steps to tour indices
+    // Wizard Step 2 -> Tour Index 2 (Trust Authority)
+    // Wizard Step 3 -> Tour Index 3 (Optionality)
+    // Wizard Step 4 -> Tour Index 4 (Growth Loop)
+
+    let nextTourIndex = -1;
+    if (completedStep === 2) nextTourIndex = 2;
+    if (completedStep === 3) nextTourIndex = 3;
+    if (completedStep === 4) nextTourIndex = 4;
+
+    if (nextTourIndex !== -1) {
+        isTourPaused = false;
+        const overlay = document.getElementById('tour-overlay');
+        overlay.style.display = 'block';
+        gsap.to(overlay, { opacity: 1, duration: 0.5 });
+        showTourStep(nextTourIndex);
+    }
+}
+
 function endTour() {
     const overlay = document.getElementById('tour-overlay');
+    window.removeEventListener('scroll', updateTourPositions);
     gsap.to(overlay, {
         opacity: 0, duration: 0.5, onComplete: () => {
             overlay.style.display = 'none';
             localStorage.setItem('hasSeenTour', 'true');
+
+            // Reset steps to step 1
+            state.step = 1;
+            updateUI(false);
         }
     });
 }

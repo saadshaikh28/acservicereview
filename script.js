@@ -221,6 +221,30 @@ function initEventListeners() {
             }, 2000);
         });
     }
+
+    // Generate Review Button
+    const generateBtn = document.getElementById('generateBtn');
+    if (generateBtn) {
+        generateBtn.addEventListener('click', () => {
+            const resultSection = document.getElementById('result-section');
+
+            // First show it but keep it invisible
+            resultSection.style.display = 'block';
+
+            // Animation
+            gsap.fromTo(resultSection,
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+            );
+
+            generateReview();
+
+            // Scroll safely
+            setTimeout(() => {
+                scrollToElement(resultSection);
+            }, 100);
+        });
+    }
 }
 
 function scrollToElement(el) {

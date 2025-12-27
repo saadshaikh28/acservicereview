@@ -124,13 +124,14 @@ h3 {
 }
 
 .hero-subtitle-line {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     display: block !important;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--text-muted);
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.8rem;
     text-transform: uppercase;
+    opacity: 0.8;
 }
 
 .company-brand {
@@ -383,67 +384,11 @@ h3 {
     font-size: 1.1rem;
 }
 
-/* Progress Bar */
-.progress-container {
-    margin-bottom: 3rem;
-    position: relative;
-    padding: 0 1rem;
-}
-
-.progress-bar-bg {
-    background: rgba(255, 255, 255, 0.05);
-    height: 8px;
-    border-radius: 4px;
-    position: relative;
-    top: 14px;
-    z-index: 1;
-}
-
-.progress-bar-fill {
-    background: var(--accent-color);
-    height: 100%;
-    border-radius: 4px;
-    width: 20%;
-    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 15px var(--accent-glow);
-}
-
-.steps-indicator {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    z-index: 2;
-}
-
+/* Progress Bar - REMOVED */
+.progress-container,
+.steps-indicator,
 .step-dot {
-    width: 38px;
-    height: 38px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    border: 1px solid var(--glass-border);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: default;
-    pointer-events: none;
-}
-
-/* Allow clicking on active/completed steps */
-.step-dot.active,
-.step-dot.completed {
-    cursor: pointer;
-    pointer-events: auto;
-}
-
-.step-dot.active {
-    background: var(--accent-color);
-    color: white;
-    transform: scale(1.1);
-    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+    display: none !important;
 }
 
 /* Style for steps we've already passed (optional but good for UX) */
@@ -495,8 +440,7 @@ h3 {
 }
 
 .form-group label::before {
-    display: none;
-    /* Removed as requested */
+    display: none !important;
 }
 
 .centered-input {
@@ -695,6 +639,46 @@ input:checked+.slider:before {
     border-top: 1px solid var(--glass-border);
     margin-top: 2rem;
     scroll-snap-align: start;
+    display: none;
+    /* Hidden by default */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.results-container.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-lg {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.shine-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.shine-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 100%;
+    height: 200%;
+    background: linear-gradient(transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s;
+}
+
+.shine-button:hover::after {
+    left: 100%;
 }
 
 /* Map Styling */
@@ -937,8 +921,7 @@ input:checked+.slider:before {
 }
 
 .step-num {
-    display: none;
-    /* Removed as requested */
+    display: none !important;
 }
 
 .btn-green {
@@ -1050,7 +1033,7 @@ input:checked+.slider:before {
         font-size: 0.9rem;
     }
 
-    .roof-icon {
+    .service-icon {
         height: 36px;
     }
 

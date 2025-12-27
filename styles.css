@@ -268,7 +268,7 @@ h3 {
     color: white;
 }
 
-/* Calculator Section & Glassmorphism */
+/* Calculator Section */
 .calculator-section {
     position: relative;
     margin-top: -120px;
@@ -289,11 +289,14 @@ h3 {
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
-    padding: 3.5rem;
+    padding: 3.5rem 2rem;
     max-width: 800px;
     margin: 0 auto;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    max-height: 80vh;
+    scroll-snap-type: y proximity;
+    scroll-behavior: smooth;
 }
 
 .calculator-card::before {
@@ -313,15 +316,7 @@ h3 {
     z-index: 2;
 }
 
-/* Wizard Steps */
 .wizard-step {
-    display: none;
-    animation: fadeInStep 0.5s ease forwards;
-    counter-reset: question;
-    /* Reset counter for each step */
-}
-
-.wizard-step.active {
     display: block;
 }
 
@@ -447,13 +442,14 @@ h3 {
 
 /* Form Inputs */
 .form-group {
-    margin-bottom: 3.5rem;
-    padding: 2rem;
+    margin-bottom: 5rem;
+    padding: 3rem 2rem;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-lg);
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+    scroll-snap-align: start;
 }
 
 @media(min-width: 768px) {
@@ -680,65 +676,17 @@ input:checked+.slider:before {
     transform: translateX(22px);
 }
 
-/* Navigation Buttons */
+/* Remove unused Nav */
 .step-nav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 3rem;
-    align-items: center;
-    gap: 1rem;
+    display: none;
 }
 
-@media (max-width: 600px) {
-    .step-nav .btn {
-        padding: 0.75rem 0.5rem;
-        /* Reduced padding */
-        font-size: 0.85rem;
-        /* Slightly smaller text */
-        flex: 1;
-        /* Force equal width */
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-.btn-text {
-    color: var(--text-muted);
-    font-weight: 600;
-    text-decoration: underline;
-    font-size: 0.9rem;
-}
-
-.btn-text:hover {
-    color: var(--primary-color);
-}
-
-/* Results */
 .results-container {
     text-align: center;
-}
-
-.price-display {
-    margin: 2rem 0;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: var(--radius-md);
-}
-
-.price-range {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    letter-spacing: -1px;
-    margin: 0.5rem 0;
-}
-
-.label {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--text-muted);
+    padding-top: 4rem;
+    border-top: 1px solid var(--glass-border);
+    margin-top: 2rem;
+    scroll-snap-align: start;
 }
 
 /* Map Styling */

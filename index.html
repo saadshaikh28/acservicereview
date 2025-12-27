@@ -57,218 +57,166 @@
         <div class="container">
             <div class="calculator-card glass-panel">
 
-                <!-- Progress Bar -->
-                <div class="progress-container">
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progressBar"></div>
-                    </div>
-                    <div class="steps-indicator">
-                        <span class="step-dot active">1</span>
-                        <span class="step-dot">2</span>
-                        <span class="step-dot">3</span>
-                        <span class="step-dot">4</span>
-                    </div>
-                </div>
-
                 <form id="reviewForm" onsubmit="return false;">
 
-                    <!-- STEP 1: SERVICE PROVIDED -->
-                    <div class="wizard-step active" data-step="1">
-                        <div class="step-header">
-                            <span class="step-badge">Section 1 / 3</span>
-                            <h2>What service did we provide?</h2>
-                            <p>Select the service we provided and we'll do the rest.</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Service Type</label>
-                            <div class="shape-grid">
-                                <div class="shape-option" data-value="AC repair" data-group="service">
-                                    <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path
-                                            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                                    </svg>
-                                    <span>AC Repair</span>
-                                </div>
-                                <div class="shape-option" data-value="AC maintenance" data-group="service">
-                                    <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path
-                                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-                                    </svg>
-                                    <span>AC Maintenance</span>
-                                </div>
-                                <div class="shape-option" data-value="AC installation" data-group="service">
-                                    <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
-                                    </svg>
-                                    <span>AC Installation</span>
-                                </div>
-                                <div class="shape-option" data-value="Gas refill" data-group="service">
-                                    <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                                    </svg>
-                                    <span>Gas Refill</span>
-                                </div>
-                                <div class="shape-option" data-value="AC cleaning" data-group="service">
-                                    <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                    </svg>
-                                    <span>AC Cleaning</span>
-                                </div>
+                    <!-- QUESTION 1: SERVICE PROVIDED -->
+                    <div class="form-group" id="q-service">
+                        <label>What service did we provide?</label>
+                        <p class="sub-label">Select the service we provided and we'll do the rest.</p>
+                        <div class="shape-grid">
+                            <div class="shape-option" data-value="AC repair" data-group="service">
+                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                                </svg>
+                                <span>AC Repair</span>
                             </div>
-                        </div>
-
-                        <!-- CONDITIONAL PROBLEM FIXED (Integrated into Section 1) -->
-                        <div id="problemFixedContainer" class="form-group mt-4"
-                            style="display: none; height: 0; overflow: hidden; opacity: 0;">
-                            <label>What problem was fixed?</label>
-                            <p class="sub-label">Select the main issue our team resolved.</p>
-                            <div class="shape-grid">
-                                <div class="shape-option" data-value="AC not cooling" data-group="problem">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">❄️</span>
-                                    <span>AC not cooling</span>
-                                </div>
-                                <div class="shape-option" data-value="Weak cooling" data-group="problem">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🌡️</span>
-                                    <span>Weak cooling</span>
-                                </div>
-                                <div class="shape-option" data-value="Water leakage" data-group="problem">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">💧</span>
-                                    <span>Water leakage</span>
-                                </div>
-                                <div class="shape-option" data-value="AC making noise" data-group="problem">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🔊</span>
-                                    <span>AC making noise</span>
-                                </div>
-                                <div class="shape-option" data-value="AC not turning on" data-group="problem">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🔌</span>
-                                    <span>AC not turning on</span>
-                                </div>
+                            <div class="shape-option" data-value="AC maintenance" data-group="service">
+                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                                </svg>
+                                <span>AC Maintenance</span>
                             </div>
-                        </div>
-
-                        <div class="step-nav">
-                            <div></div>
-                            <button class="btn btn-primary next-btn">Next Step &rarr;</button>
+                            <div class="shape-option" data-value="AC installation" data-group="service">
+                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
+                                </svg>
+                                <span>AC Installation</span>
+                            </div>
+                            <div class="shape-option" data-value="Gas refill" data-group="service">
+                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                                </svg>
+                                <span>Gas Refill</span>
+                            </div>
+                            <div class="shape-option" data-value="AC cleaning" data-group="service">
+                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                </svg>
+                                <span>AC Cleaning</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- STEP 2: HIGHLIGHTS & RECOMMENDATION -->
-                    <div class="wizard-step" data-step="2">
-                        <div class="step-header">
-                            <span class="step-badge">Section 2 / 3</span>
-                            <h2>What did you like most?</h2>
-                            <p>Choose the highlight of our service.</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Service Highlights</label>
-                            <div class="shape-grid">
-                                <div class="shape-option" data-value="Fast response" data-group="highlight">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">⚡</span>
-                                    <span>Fast response</span>
-                                </div>
-                                <div class="shape-option" data-value="On-time technician" data-group="highlight">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🕒</span>
-                                    <span>On-time technician</span>
-                                </div>
-                                <div class="shape-option" data-value="Professional service" data-group="highlight">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">👔</span>
-                                    <span>Professional service</span>
-                                </div>
-                                <div class="shape-option" data-value="Problem solved properly" data-group="highlight">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">✅</span>
-                                    <span>Problem solved</span>
-                                </div>
-                                <div class="shape-option" data-value="Fair price" data-group="highlight">
-                                    <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">💰</span>
-                                    <span>Fair price</span>
-                                </div>
+                    <!-- CONDITIONAL QUESTION: PROBLEM FIXED -->
+                    <div id="problemFixedContainer" class="form-group"
+                        style="display: none; height: 0; opacity: 0; overflow: hidden;">
+                        <label>What problem was fixed?</label>
+                        <p class="sub-label">Select the main issue our team resolved.</p>
+                        <div class="shape-grid">
+                            <div class="shape-option" data-value="AC not cooling" data-group="problem">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">❄️</span>
+                                <span>AC not cooling</span>
                             </div>
-                        </div>
-
-                        <!-- PREMIUM GOLDEN RECOMMENDATION SLIDER -->
-                        <div class="form-group mt-5">
-                            <label>Would you recommend us to your friends?</label>
-                            <div class="premium-slider-container" id="recommendSliderContainer">
-                                <div class="slider-track-area">
-                                    <div class="liquid-track">
-                                        <div class="liquid-fill" id="goldenLiquid"></div>
-                                    </div>
-                                    <input type="range" id="recommendSlider" min="1" max="3" step="1" value="1"
-                                        class="liquid-range">
-                                </div>
-                                <div class="slider-labels premium-labels">
-                                    <span data-val="1" class="active">Likely</span>
-                                    <span data-val="2">Very Likely</span>
-                                    <span data-val="3">Highly Recommended</span>
-                                </div>
+                            <div class="shape-option" data-value="Weak cooling" data-group="problem">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🌡️</span>
+                                <span>Weak cooling</span>
                             </div>
-                        </div>
-
-                        <div class="step-nav">
-                            <button class="btn btn-outline prev-btn">&larr; Previous Step</button>
-                            <button class="btn btn-primary next-btn">Next Step &rarr;</button>
+                            <div class="shape-option" data-value="Water leakage" data-group="problem">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">💧</span>
+                                <span>Water leakage</span>
+                            </div>
+                            <div class="shape-option" data-value="AC making noise" data-group="problem">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🔊</span>
+                                <span>AC making noise</span>
+                            </div>
+                            <div class="shape-option" data-value="AC not turning on" data-group="problem">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🔌</span>
+                                <span>AC not turning on</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- STEP 3: FINAL TOUCHES -->
-                    <div class="wizard-step" data-step="3">
-                        <div class="step-header">
-                            <span class="step-badge">Section 3 / 3</span>
-                            <h2>Final Touches</h2>
-                            <p>Anything else you'd like to mention? (Optional)</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Additional Comments (Optional)</label>
-                            <textarea id="additionalComments" class="glass-textarea"
-                                placeholder="e.g. They left the property spotless!"></textarea>
-                        </div>
-
-                        <div class="step-nav">
-                            <button class="btn btn-outline prev-btn">&larr; Previous Step</button>
-                            <button class="btn btn-primary next-btn">Generate Review &rarr;</button>
+                    <!-- QUESTION 2: HIGHLIGHTS -->
+                    <div class="form-group" id="q-highlights">
+                        <label>What did you like most?</label>
+                        <p class="sub-label">Choose the highlight of our service.</p>
+                        <div class="shape-grid">
+                            <div class="shape-option" data-value="Fast response" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">⚡</span>
+                                <span>Fast response</span>
+                            </div>
+                            <div class="shape-option" data-value="On-time technician" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🕒</span>
+                                <span>On-time technician</span>
+                            </div>
+                            <div class="shape-option" data-value="Professional service" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">👔</span>
+                                <span>Professional service</span>
+                            </div>
+                            <div class="shape-option" data-value="Problem solved properly" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">✅</span>
+                                <span>Problem solved</span>
+                            </div>
+                            <div class="shape-option" data-value="Fair price" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">💰</span>
+                                <span>Fair price</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- STEP 4: RESULT -->
-                    <div class="wizard-step" data-step="4">
-                        <div class="results-container">
-                            <div class="step-header">
-                                <span class="step-badge">Your Review is Ready!</span>
-                                <h2>Here's what we generated:</h2>
-                                <p>Click to copy and then head to Google Maps.</p>
-                            </div>
-
-                            <div class="review-editor-container">
-                                <textarea id="reviewText" class="generated-review-box editable-review"
-                                    spellcheck="false"></textarea>
-                                <div class="edit-hint">You can edit the text above if you'd like to make it personal!
+                    <!-- QUESTION 3: RECOMMENDATION -->
+                    <div class="form-group" id="q-recommend">
+                        <label>Would you recommend us to your friends?</label>
+                        <p class="sub-label">Your recommendation matters to us.</p>
+                        <div class="premium-slider-container" id="recommendSliderContainer">
+                            <div class="slider-track-area">
+                                <div class="liquid-track">
+                                    <div class="liquid-fill" id="goldenLiquid"></div>
                                 </div>
+                                <input type="range" id="recommendSlider" min="1" max="3" step="1" value="1"
+                                    class="liquid-range">
                             </div>
-
-                            <div class="action-steps vertical-stack mt-4">
-                                <div class="step-action">
-                                    <span class="step-num">Step 1</span>
-                                    <button id="copyBtn" class="btn btn-primary full-width">
-                                        <span class="icon">📋</span> Copy Review Text
-                                    </button>
-                                </div>
-                                <div class="step-action mt-2">
-                                    <span class="step-num">Step 2</span>
-                                    <a href="#" id="googleMapsBtn" class="btn btn-submit full-width" target="_blank">
-                                        <span class="icon">📍</span> Submit the review on Google Maps
-                                    </a>
-                                </div>
+                            <div class="slider-labels premium-labels">
+                                <span data-val="1" class="active">Likely</span>
+                                <span data-val="2">Very Likely</span>
+                                <span data-val="3">Highly Recommended</span>
                             </div>
+                        </div>
+                    </div>
 
-                            <button class="btn-text prev-btn mt-4">Retry / Edit Details</button>
+                    <!-- QUESTION 4: FINAL TOUCHES -->
+                    <div class="form-group" id="q-comments">
+                        <label>Final Touches</label>
+                        <p class="sub-label">Anything else you'd like to mention? (Optional)</p>
+                        <textarea id="additionalComments" class="glass-textarea"
+                            placeholder="e.g. They left the property spotless!"></textarea>
+                    </div>
+
+                    <!-- RESULT SECTION -->
+                    <div class="results-container" id="result-section">
+                        <div class="step-header">
+                            <span class="step-badge">Your Review is Ready!</span>
+                            <h2>Here's what we generated:</h2>
+                            <p>Click to copy and then head to Google Maps.</p>
+                        </div>
+
+                        <div class="review-editor-container">
+                            <textarea id="reviewText" class="generated-review-box editable-review"
+                                spellcheck="false"></textarea>
+                            <div class="edit-hint">You can edit the text above if you'd like to make it personal!
+                            </div>
+                        </div>
+
+                        <div class="action-steps vertical-stack mt-4">
+                            <div class="step-action">
+                                <span class="step-num">Step 1</span>
+                                <button id="copyBtn" class="btn btn-primary full-width">
+                                    <span class="icon">📋</span> Copy Review Text
+                                </button>
+                            </div>
+                            <div class="step-action mt-2">
+                                <span class="step-num">Step 2</span>
+                                <a href="#" id="googleMapsBtn" class="btn btn-submit full-width" target="_blank">
+                                    <span class="icon">📍</span> Submit the review on Google Maps
+                                </a>
+                            </div>
                         </div>
                     </div>
 

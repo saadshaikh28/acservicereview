@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initThreeJS();
     initGSAP();
     initEventListeners();
-    
+
     // Initial generation
     generateReview();
 
@@ -68,14 +68,14 @@ function loadACConfig() {
             if (googleMapsBtn && acConfig.googleReviewLink) {
                 googleMapsBtn.href = acConfig.googleReviewLink;
             }
-            
+
             // Re-generate to pick up names
             generateReview();
         })
         .catch(err => console.error("Config load error:", err));
 }
 
-// --- 3D BACKGROUND (Three.js) ---
+// --- 3D BACKGROUND ---
 function initThreeJS() {
     const container = document.getElementById('canvas-container');
     if (!container) return;
@@ -89,7 +89,7 @@ function initThreeJS() {
     container.appendChild(renderer.domElement);
 
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1500; 
+    const particlesCount = 1500;
     const posArray = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount * 3; i++) {
@@ -136,7 +136,7 @@ function initThreeJS() {
     });
 }
 
-// --- GSAP ANIMATIONS ---
+// --- GSAP ---
 function initGSAP() {
     gsap.from(".hero-title .line", {
         y: 100,
@@ -156,7 +156,6 @@ function initEventListeners() {
                 opt.classList.add('selected');
                 gsap.fromTo(opt, { scale: 0.95 }, { scale: 1, duration: 0.3 });
 
-                // Conditional reveal for Help Options
                 if (group === 'service') {
                     const problemContainer = document.getElementById('problemFixedContainer');
                     if (state.service === 'AC repair') {
@@ -165,7 +164,7 @@ function initEventListeners() {
                         scrollToElement(problemContainer);
                     } else {
                         gsap.to(problemContainer, { height: 0, opacity: 0, duration: 0.3, onComplete: () => problemContainer.style.display = 'none' });
-                        state.problem = ''; 
+                        state.problem = '';
                         scrollToElement(document.getElementById('q-highlights'));
                     }
                 } else if (group === 'problem') {
@@ -173,7 +172,7 @@ function initEventListeners() {
                 } else if (group === 'highlight') {
                     scrollToElement(document.getElementById('q-recommend'));
                 }
-                
+
                 generateReview();
             });
         });
@@ -199,13 +198,11 @@ function initEventListeners() {
 
         updateRecommendationSlider(1);
     }
-    
-    // Comments
+
     document.getElementById('additionalComments').addEventListener('input', () => {
         generateReview();
     });
 
-    // Copy Button
     const copyBtn = document.getElementById('copyBtn');
     if (copyBtn) {
         copyBtn.addEventListener('click', () => {
@@ -229,7 +226,7 @@ function scrollToElement(el) {
     const containerRect = container.getBoundingClientRect();
     const elRect = el.getBoundingClientRect();
     const relativeTop = elRect.top - containerRect.top + container.scrollTop;
-    
+
     container.scrollTo({
         top: relativeTop - 20,
         behavior: 'smooth'
@@ -267,7 +264,7 @@ function generateReview() {
     const extra = document.getElementById('additionalComments').value;
 
     const intro = `I recently called for **${service}** in **${city}** and the experience was fantastic.`;
-    
+
     let probDetail = "";
     if (service === 'AC repair' && problem) {
         probDetail = `Our unit was suffering from **${problem}**, but they fixed it perfectly. `;
@@ -276,7 +273,7 @@ function generateReview() {
     }
 
     const highlightText = state.highlight ? `I was particularly impressed by their **${highlight}**.` : "";
-    
+
     const recPhrase = rec === 'Highly Recommended' ? `Truly the gold standard in **${city}**!` : `I'd definitely recommend them.`;
 
     let finalReview = `${intro} ${probDetail}${highlightText} ${recPhrase} ${extra ? extra : ''}`;
@@ -289,26 +286,26 @@ function generateReview() {
 // --- WEBSITE TOUR LOGIC ---
 const tourSteps = () => [
     {
-        title: `Welcome to the Growth Engine`,
-        description: `Stop settling for "good" reviews. This system is designed to turn every customer for ${acConfig.companyName} into a powerful SEO asset.`,
+        title: `Hi, I'm your guide!`,
+        description: `I'll show you how we're helping ${acConfig.name} grow. Let's start by looking at how we capture what customers actually search for.`,
         target: "#mainHeroTitle",
         pos: "bottom"
     },
     {
-        title: "The SEO Keyword Capture",
-        description: `By selecting specific services, we capture high-value keywords (like "AC Repair" in ${acConfig.serviceArea}) that Google prioritizes for rankings.`,
+        title: "SEO Keywords",
+        description: `When someone selects "AC Repair", we're actually catching high-value keywords for Google. This helps ${acConfig.name} show up first in ${acConfig.serviceArea}.`,
         target: "#q-service",
         pos: "bottom"
     },
     {
-        title: "Trust Authority",
-        description: `Highlighting specific wins builds "Trust Authority." This data turns into a mini-sales pitch for your next customer.`,
+        title: "Building Trust",
+        description: `By highlighting specific wins above, we build authority. It's like a mini sales pitch that makes new customers trust ${acConfig.name} instantly.`,
         target: "#q-highlights",
         pos: "bottom"
     },
     {
-        title: "Exponential Growth",
-        description: `Behold! A perfectly optimized, keyword-rich review. Copy, Click, and let ${acConfig.companyName} rank to the top!`,
+        title: "The Result",
+        description: `And here it is! A review that's not just nice, but scientifically designed to rank ${acConfig.name} higher. Just copy and post!`,
         target: "#result-section",
         pos: "top"
     }
@@ -317,7 +314,7 @@ const tourSteps = () => [
 let currentTourStep = 0;
 
 function checkTour() {
-    if (!localStorage.getItem('hasSeenTourV2')) {
+    if (!localStorage.getItem('hasSeenTourV3')) {
         startTour();
     }
 }
@@ -325,7 +322,7 @@ function checkTour() {
 function startTour() {
     const overlay = document.getElementById('tour-overlay');
     overlay.style.display = 'block';
-    overlay.style.pointerEvents = 'none'; 
+    overlay.style.pointerEvents = 'none';
     gsap.to(overlay, { opacity: 1, duration: 0.5 });
     showTourStep(0);
     setupTourListeners();
@@ -334,7 +331,6 @@ function startTour() {
 
 function setupTourListeners() {
     document.getElementById('next-tour').addEventListener('click', nextTourStep);
-    document.getElementById('prev-tour').addEventListener('click', prevTourStep);
     document.getElementById('skip-tour').addEventListener('click', endTour);
 }
 
@@ -353,7 +349,6 @@ function showTourStep(index) {
     }, 10);
 
     const nextBtn = document.getElementById('next-tour');
-    document.getElementById('prev-tour').style.display = index === 0 ? 'none' : 'block';
     nextBtn.innerText = index === steps.length - 1 ? 'Finish' : 'Next';
 
     updateTourPositions();
@@ -365,24 +360,31 @@ function showTourStep(index) {
 }
 
 function updateTourPositions() {
+    const tooltip = document.getElementById('tour-tooltip');
     if (document.getElementById('tour-overlay').style.display === 'none') return;
+
+    // On mobile, the CSS handles fixed positioning at bottom
+    if (window.innerWidth <= 480) {
+        tooltip.style.top = '';
+        tooltip.style.left = '';
+        return;
+    }
+
     const steps = tourSteps();
     const step = steps[currentTourStep];
     const targetEl = document.querySelector(step.target);
     const highlight = document.getElementById('tour-highlight');
-    const tooltip = document.getElementById('tour-tooltip');
 
     if (!targetEl) return;
     const rect = targetEl.getBoundingClientRect();
     tooltip.setAttribute('data-pos', step.pos);
 
-    gsap.to(highlight, {
+    // Keep highlight synced but transparent in CSS
+    gsap.set(highlight, {
         top: rect.top - 8,
         left: rect.left - 8,
         width: rect.width + 16,
-        height: rect.height + 16,
-        duration: 0.2,
-        ease: "power2.out"
+        height: rect.height + 16
     });
 
     const viewportWidth = window.innerWidth;
@@ -411,18 +413,12 @@ function nextTourStep() {
     }
 }
 
-function prevTourStep() {
-    if (currentTourStep > 0) {
-        showTourStep(currentTourStep - 1);
-    }
-}
-
 function endTour() {
     const overlay = document.getElementById('tour-overlay');
     gsap.to(overlay, {
         opacity: 0, duration: 0.5, onComplete: () => {
             overlay.style.display = 'none';
-            localStorage.setItem('hasSeenTourV2', 'true');
+            localStorage.setItem('hasSeenTourV3', 'true');
         }
     });
 }

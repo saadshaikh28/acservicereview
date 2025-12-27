@@ -181,15 +181,21 @@ function initEventListeners() {
             const val = parseInt(e.target.value);
             updateRecommendationSlider(val);
             generateReview();
+
+            // Auto-scroll after a short delay to let the user finish sliding
+            clearTimeout(window.sliderScrollTimeout);
+            window.sliderScrollTimeout = setTimeout(() => {
+                scrollToElement(document.getElementById('q-comments'));
+            }, 800);
         });
 
-        const labels = document.querySelectorAll('.premium-labels span');
         labels.forEach(lbl => {
             lbl.addEventListener('click', () => {
                 const val = parseInt(lbl.dataset.val);
                 recommendSlider.value = val;
                 updateRecommendationSlider(val);
                 generateReview();
+                scrollToElement(document.getElementById('q-comments'));
             });
         });
 

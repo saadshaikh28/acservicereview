@@ -120,8 +120,17 @@ h3 {
 }
 
 .hero-title .line {
-    display: inline;
-    /* Keep on same line if possible */
+    display: inline-block;
+}
+
+.hero-subtitle-line {
+    font-size: 1.5rem;
+    display: block !important;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
 }
 
 .company-brand {
@@ -297,6 +306,17 @@ h3 {
     max-height: 80vh;
     scroll-snap-type: y proximity;
     scroll-behavior: smooth;
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.calculator-card::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Opera */
 }
 
 .calculator-card::before {
@@ -475,20 +495,8 @@ h3 {
 }
 
 .form-group label::before {
-    counter-increment: question;
-    content: counter(question);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: rgba(0, 242, 255, 0.1);
-    color: var(--accent-color);
-    border: 1px solid var(--accent-color);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 900;
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+    display: none;
+    /* Removed as requested */
 }
 
 .centered-input {

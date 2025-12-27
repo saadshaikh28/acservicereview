@@ -1267,4 +1267,123 @@ input:checked+.slider:before {
     color: rgba(255, 255, 255, 0.5);
     margin-bottom: 12px;
     display: block;
+
+}
+
+/* --- WEBSITE TOUR --- */
+.tour-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.tour-highlight {
+    position: absolute;
+    border-radius: 12px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10000;
+    pointer-events: auto;
+}
+
+.tour-tooltip {
+    position: absolute;
+    width: 320px;
+    padding: 24px;
+    z-index: 10001;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid rgba(250, 204, 21, 0.3) !important;
+}
+
+.tour-tooltip.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tour-content h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.tour-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.tour-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.tour-nav-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-sm {
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+}
+
+.tour-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+}
+
+.tour-progress-fill {
+    height: 100%;
+    background: var(--primary);
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+/* Position mapping for the tooltips */
+.tour-tooltip[data-pos="bottom"] {
+    margin-top: 20px;
+}
+
+.tour-tooltip[data-pos="top"] {
+    margin-bottom: 20px;
+}
+
+.tour-tooltip[data-pos="right"] {
+    margin-left: 20px;
+}
+
+.tour-tooltip[data-pos="left"] {
+    margin-right: 20px;
+}
+
+@media (max-width: 480px) {
+    .tour-tooltip {
+        width: calc(100% - 40px);
+        max-width: 320px;
+        padding: 20px;
+    }
+
+    .tour-highlight {
+        border-radius: 8px;
+    }
 }

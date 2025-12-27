@@ -37,7 +37,7 @@ export async function onRequest(context) {
         }
 
         const config = await configResponse.json();
-        const displayName = config.companyName || config.name || "Roofer";
+        const displayName = config.companyName || config.name || "AC Service Technician";
         const pageTitle = `Share your experience about ${displayName}!`;
         const pageDesc = `Help ${displayName} grow by sharing your feedback. Quick, interactive, and takes less than a minute!`;
 

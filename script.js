@@ -89,45 +89,50 @@ function initThreeJS() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-    const material = new THREE.MeshBasicMaterial({
-        color: 0xFACC15,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.05
-    });
-
-    const knot = new THREE.Mesh(geometry, material);
-    scene.add(knot);
-
-    // Particles
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 500;
+    const particlesCount = 1500; // More particles for snow effect
     const posArray = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 50;
+        posArray[i] = (Math.random() - 0.5) * 60;
     }
 
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.05,
-        color: 0xFACC15,
+        size: 0.1,
+        color: 0x00F2FF,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending
     });
 
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
-    camera.position.z = 20;
+    // Add a pulsing glow light
+    const pointLight = new THREE.PointLight(0x0078FF, 2, 50);
+    pointLight.position.set(0, 0, 10);
+    scene.add(pointLight);
+
+    camera.position.z = 25;
 
     function animate() {
         requestAnimationFrame(animate);
-        knot.rotation.x += 0.002;
-        knot.rotation.y += 0.001;
-        particlesMesh.rotation.y -= 0.0003;
-        particlesMesh.rotation.x += 0.0001;
+
+        // Snow falling effect
+        const positions = particlesMesh.geometry.attributes.position.array;
+        for (let i = 1; i < positions.length; i += 3) {
+            positions[i] -= 0.05; // Falling speed
+            if (positions[i] < -30) positions[i] = 30; // Reset to top
+        }
+        particlesMesh.geometry.attributes.position.needsUpdate = true;
+
+        particlesMesh.rotation.y += 0.001;
+
+        // Pulse light
+        const time = Date.now() * 0.001;
+        pointLight.intensity = 1 + Math.sin(time) * 0.5;
+
         renderer.render(scene, camera);
     }
     animate();
@@ -480,9 +485,14 @@ function showTourStep(index) {
     }
 
     // Update Content
-    document.getElementById('tour-title').innerText = step.title;
-    document.getElementById('tour-description').innerHTML = step.description.replace(/\n/g, '<br>');
-    document.getElementById('tour-progress-fill').style.width = `${((index + 1) / steps.length) * 100}%`;
+    tooltip.classList.remove('active');
+    // Small delay to re-trigger animation
+    setTimeout(() => {
+        document.getElementById('tour-title').innerText = step.title;
+        document.getElementById('tour-description').innerHTML = step.description.replace(/\n/g, '<br>');
+        document.getElementById('tour-progress-fill').style.width = `${((index + 1) / steps.length) * 100}%`;
+        tooltip.classList.add('active');
+    }, 10);
 
     // Nav Buttons
     const nextBtn = document.getElementById('next-tour');

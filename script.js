@@ -189,6 +189,7 @@ function initEventListeners() {
             }, 800);
         });
 
+        const labels = document.querySelectorAll('.premium-labels span');
         labels.forEach(lbl => {
             lbl.addEventListener('click', () => {
                 const val = parseInt(lbl.dataset.val);

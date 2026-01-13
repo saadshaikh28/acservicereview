@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AC Service Review Engine</title>
-    <meta name="description" content="Generate a professional Google review for your AC technician in clicks.">
+    <title>Dentist Patient Review Generator</title>
+    <meta name="description" content="Generate a professional, keyword-rich Google review for your dentist in seconds.">
 
     <!-- Open Graph / Social Previews -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="/">
-    <meta property="og:title" id="ogTitle" content="Share Your AC Service Experience">
-    <meta property="og:description" content="Help others find the best AC service by sharing your feedback.">
+    <meta property="og:title" id="ogTitle" content="Share Your Dental Experience">
+    <meta property="og:description" content="Help others find the best dental care by sharing your feedback.">
     <meta property="og:image" content="/ac-review-bg.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -19,8 +19,8 @@
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="/">
-    <meta property="twitter:title" id="twitterTitle" content="Share Your AC Service Experience">
-    <meta property="twitter:description" content="Help others find the best AC service by sharing your feedback.">
+    <meta property="twitter:title" id="twitterTitle" content="Share Your Dental Experience">
+    <meta property="twitter:description" content="Help others find the best dental care by sharing your feedback.">
     <meta property="twitter:image" content="/ac-review-bg.png">
 
     <!-- Fonts -->
@@ -47,7 +47,7 @@
         <div class="container hero-content">
             <h1 class="hero-title" id="mainHeroTitle">
                 <span class="line hero-subtitle-line">Share your experience about</span>
-                <span class="line company-brand" id="titleCompanyName">our AC team</span>
+                <span class="line company-brand" id="titleCompanyName">our dental team</span>
             </h1>
         </div>
     </header>
@@ -59,104 +59,82 @@
 
                 <form id="reviewForm" onsubmit="return false;">
 
-                    <!-- QUESTION 1: SERVICE PROVIDED -->
-                    <div class="form-group" id="q-service">
-                        <label>What service did we provide?</label>
-                        <p class="sub-label">Select the service we provided and we'll do the rest.</p>
+                    <div class="form-group" id="q-treatment">
+                        <label>What treatment did you receive today?</label>
+                        <p class="sub-label">Select your treatment and we'll help you write a review.</p>
                         <div class="shape-grid">
-                            <div class="shape-option" data-value="AC repair" data-group="service">
-                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                                </svg>
-                                <span>AC Repair</span>
+                            <div class="shape-option" data-value="Routine Cleaning" data-group="treatment">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🪥</span>
+                                <span>Routine Cleaning</span>
                             </div>
-                            <div class="shape-option" data-value="AC maintenance" data-group="service">
-                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-                                </svg>
-                                <span>AC Maintenance</span>
+                            <div class="shape-option" data-value="Dental Filling" data-group="treatment">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🦷</span>
+                                <span>Dental Filling</span>
                             </div>
-                            <div class="shape-option" data-value="AC installation" data-group="service">
-                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
-                                </svg>
-                                <span>AC Installation</span>
+                            <div class="shape-option" data-value="Root Canal" data-group="treatment">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🏥</span>
+                                <span>Root Canal</span>
                             </div>
-                            <div class="shape-option" data-value="Gas refill" data-group="service">
-                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                                </svg>
-                                <span>Gas Refill</span>
+                            <div class="shape-option" data-value="Teeth Whitening" data-group="treatment">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">✨</span>
+                                <span>Teeth Whitening</span>
                             </div>
-                            <div class="shape-option" data-value="AC cleaning" data-group="service">
-                                <svg viewBox="0 0 24 24" class="service-icon" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                </svg>
-                                <span>AC Cleaning</span>
+                            <div class="shape-option" data-value="Orthodontics" data-group="treatment">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">😬</span>
+                                <span>Orthodontics</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- CONDITIONAL QUESTION: PROBLEM FIXED -->
-                    <div id="problemFixedContainer" class="form-group"
+                    <!-- CONDITIONAL QUESTION: EXPERIENCE DETAILS -->
+                    <div id="experienceDetailsContainer" class="form-group"
                         style="display: none; height: 0; opacity: 0; overflow: hidden;">
-                        <label>What problem was fixed?</label>
-                        <p class="sub-label">Select the main issue our team resolved.</p>
+                        <label>How was your experience during the procedure?</label>
+                        <p class="sub-label">Tell us more about how you felt.</p>
                         <div class="shape-grid">
-                            <div class="shape-option" data-value="AC not cooling" data-group="problem">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">❄️</span>
-                                <span>AC not cooling</span>
+                            <div class="shape-option" data-value="Painless" data-group="experience">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">😌</span>
+                                <span>Completely Painless</span>
                             </div>
-                            <div class="shape-option" data-value="Weak cooling" data-group="problem">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🌡️</span>
-                                <span>Weak cooling</span>
+                            <div class="shape-option" data-value="Comfortable" data-group="experience">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🛋️</span>
+                                <span>Very Comfortable</span>
                             </div>
-                            <div class="shape-option" data-value="Water leakage" data-group="problem">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">💧</span>
-                                <span>Water leakage</span>
+                            <div class="shape-option" data-value="Efficient" data-group="experience">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">⚡</span>
+                                <span>Quick & Efficient</span>
                             </div>
-                            <div class="shape-option" data-value="AC making noise" data-group="problem">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🔊</span>
-                                <span>AC making noise</span>
-                            </div>
-                            <div class="shape-option" data-value="AC not turning on" data-group="problem">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🔌</span>
-                                <span>AC not turning on</span>
+                            <div class="shape-option" data-value="Professional" data-group="experience">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">👨‍⚕️</span>
+                                <span>Highly Professional</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- QUESTION 2: HIGHLIGHTS -->
                     <div class="form-group" id="q-highlights">
-                        <label>What did you like most?</label>
-                        <p class="sub-label">Choose the highlight of our service.</p>
+                        <label>What did you like most about our clinic?</label>
+                        <p class="sub-label">Choose your favorite part of the visit.</p>
                         <div class="shape-grid">
-                            <div class="shape-option" data-value="Fast response" data-group="highlight">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">⚡</span>
-                                <span>Fast response</span>
+                            <div class="shape-option" data-value="Gentle care" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🤲</span>
+                                <span>Gentle care</span>
                             </div>
-                            <div class="shape-option" data-value="On-time technician" data-group="highlight">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🕒</span>
-                                <span>On-time technician</span>
+                            <div class="shape-option" data-value="Friendly staff" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">😊</span>
+                                <span>Friendly staff</span>
                             </div>
-                            <div class="shape-option" data-value="Professional service" data-group="highlight">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">👔</span>
-                                <span>Professional service</span>
+                            <div class="shape-option" data-value="Painless procedure" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">👌</span>
+                                <span>Painless procedure</span>
                             </div>
-                            <div class="shape-option" data-value="Problem solved properly" data-group="highlight">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">✅</span>
-                                <span>Problem solved</span>
+                            <div class="shape-option" data-value="Modern technology" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">🔬</span>
+                                <span>Modern tech</span>
                             </div>
-                            <div class="shape-option" data-value="Fair price" data-group="highlight">
-                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">💰</span>
-                                <span>Fair price</span>
+                            <div class="shape-option" data-value="Clean environment" data-group="highlight">
+                                <span class="icon" style="font-size: 1.5rem; margin-bottom: 8px;">✨</span>
+                                <span>Clean clinic</span>
                             </div>
                         </div>
                     </div>

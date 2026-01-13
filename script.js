@@ -1,16 +1,16 @@
 // --- CONFIGURATION ---
 
-let acConfig = {
-    name: "Technician",
-    companyName: "AC Expert Service",
+let siteConfig = {
+    name: "Doctor",
+    companyName: "Dental Clinic",
     serviceArea: "your city",
     googleReviewLink: "#"
 };
 
 // State Object
 let state = {
-    service: '',
-    problem: '',
+    treatment: '',
+    experience: '',
     highlight: '',
     recommendation: 'Likely', // Likely, Very Likely, Highly Recommended
     additionalComments: '',
@@ -19,7 +19,7 @@ let state = {
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-    loadACConfig();
+    loadSiteConfig();
     initThreeJS();
     initGSAP();
     initEventListeners();
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     generateReview();
 });
 
-function loadACConfig() {
+function loadSiteConfig() {
     const hostname = window.location.hostname;
     const urlParams = new URLSearchParams(window.location.search);
     let clientName = urlParams.get('config');
@@ -48,10 +48,10 @@ function loadACConfig() {
     fetch(configFile)
         .then(response => response.json())
         .then(config => {
-            acConfig = { ...acConfig, ...config };
+            siteConfig = { ...siteConfig, ...config };
 
             // Personalization
-            const displayName = acConfig.companyName || acConfig.name;
+            const displayName = siteConfig.companyName || siteConfig.name;
             document.title = `${displayName} - Leave a Review`;
 
             // Update Hero Title
@@ -62,8 +62,8 @@ function loadACConfig() {
             }
 
             const googleMapsBtn = document.getElementById('googleMapsBtn');
-            if (googleMapsBtn && acConfig.googleReviewLink) {
-                googleMapsBtn.href = acConfig.googleReviewLink;
+            if (googleMapsBtn && siteConfig.googleReviewLink) {
+                googleMapsBtn.href = siteConfig.googleReviewLink;
             }
 
             // Re-generate to pick up names
@@ -96,7 +96,7 @@ function initThreeJS() {
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particlesMaterial = new THREE.PointsMaterial({
         size: 0.1,
-        color: 0x00F2FF,
+        color: 0x00F7FF, // Slightly tweaked to a more "clinical/clean" cyan
         transparent: true,
         opacity: 0.6,
         blending: THREE.AdditiveBlending
@@ -105,7 +105,7 @@ function initThreeJS() {
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
-    const pointLight = new THREE.PointLight(0x0078FF, 2, 50);
+    const pointLight = new THREE.PointLight(0x00E0FF, 2, 50);
     pointLight.position.set(0, 0, 10);
     scene.add(pointLight);
 
@@ -144,7 +144,7 @@ function initGSAP() {
 
 // --- EVENT LISTENERS ---
 function initEventListeners() {
-    const groups = ['service', 'problem', 'highlight'];
+    const groups = ['treatment', 'experience', 'highlight'];
     groups.forEach(group => {
         document.querySelectorAll(`.shape-option[data-group="${group}"]`).forEach(opt => {
             opt.addEventListener('click', () => {
@@ -153,18 +153,13 @@ function initEventListeners() {
                 opt.classList.add('selected');
                 gsap.fromTo(opt, { scale: 0.95 }, { scale: 1, duration: 0.3 });
 
-                if (group === 'service') {
-                    const problemContainer = document.getElementById('problemFixedContainer');
-                    if (state.service === 'AC repair') {
-                        problemContainer.style.display = 'block';
-                        gsap.to(problemContainer, { height: 'auto', opacity: 1, duration: 0.5, ease: "power2.out" });
-                        scrollToElement(problemContainer);
-                    } else {
-                        gsap.to(problemContainer, { height: 0, opacity: 0, duration: 0.3, onComplete: () => problemContainer.style.display = 'none' });
-                        state.problem = '';
-                        scrollToElement(document.getElementById('q-highlights'));
-                    }
-                } else if (group === 'problem') {
+                if (group === 'treatment') {
+                    const experienceContainer = document.getElementById('experienceDetailsContainer');
+                    // Show experience details for treatments that can be sensitive (Root Canal, Filling) or just for all
+                    experienceContainer.style.display = 'block';
+                    gsap.to(experienceContainer, { height: 'auto', opacity: 1, duration: 0.5, ease: "power2.out" });
+                    scrollToElement(experienceContainer);
+                } else if (group === 'experience') {
                     scrollToElement(document.getElementById('q-highlights'));
                 } else if (group === 'highlight') {
                     scrollToElement(document.getElementById('q-recommend'));
@@ -284,27 +279,48 @@ function updateRecommendationSlider(val) {
 }
 
 function generateReview() {
-    const service = state.service || "[Service]";
-    const problem = state.problem;
-    const city = acConfig.serviceArea || 'the city';
-    const highlight = state.highlight || "[Highlight]";
+    const treatment = state.treatment || "my dental treatment";
+    const experience = state.experience;
+    const city = siteConfig.serviceArea || 'the city';
+    const highlight = state.highlight || "excellent care";
     const rec = state.recommendation;
     const extra = document.getElementById('additionalComments').value;
+    const clinicName = siteConfig.companyName || "this dental clinic";
 
-    const intro = `I recently called for **${service}** in **${city}** and the experience was fantastic.`;
+    // SEO-rich Variations
+    const intros = [
+        `I recently visited **${clinicName}** for **${treatment}** in **${city}** and I couldn't be happier with the results.`,
+        `If you're looking for the **best dentist in ${city}**, I highly recommend **${clinicName}**. I went in for **${treatment}** and had a great experience.`,
+        `I had a fantastic experience at **${clinicName}** during my **${treatment}** appointment.`
+    ];
 
-    let probDetail = "";
-    if (service === 'AC repair' && problem) {
-        probDetail = `Our unit was suffering from **${problem}**, but they fixed it perfectly. `;
-    } else {
-        probDetail = `The work was carried out with extreme care and precision. `;
-    }
+    const expDetails = {
+        'Painless': `The procedure was **completely painless**, which was a huge relief for me.`,
+        'Comfortable': `I felt **very comfortable** throughout the entire appointment.`,
+        'Efficient': `The team was **quick and efficient**, getting me in and out without any hassle.`,
+        'Professional': `The level of **professionalism** shown by the dental team was top-notch.`
+    };
 
-    const highlightText = state.highlight ? `I was particularly impressed by their **${highlight}**.` : "";
+    const highlights = {
+        'Gentle care': `I really appreciated the **gentle care** provided by the staff.`,
+        'Friendly staff': `Every member of the **staff was incredibly friendly** and welcoming.`,
+        'Painless procedure': `The **painless procedure** made my visit much less stressful than expected.`,
+        'Modern technology': `They use the latest **modern dental technology**, which is very impressive.`,
+        'Clean environment': `The clinic has a very **clean and professional environment**.`
+    };
 
-    const recPhrase = rec === 'Highly Recommended' ? `Truly the gold standard in **${city}**!` : `I'd definitely recommend them.`;
+    const recommendations = {
+        'Likely': `I would definitely suggest checking them out for your dental needs.`,
+        'Very Likely': `I will certainly be coming back here for my future checkups.`,
+        'Highly Recommended': `They are truly the **top-rated dental office in ${city}**. Highly recommended!`
+    };
 
-    let finalReview = `${intro} ${probDetail}${highlightText} ${recPhrase} ${extra ? extra : ''}`;
+    const intro = intros[Math.floor(Math.random() * intros.length)];
+    const expText = experience ? expDetails[experience] : "The treatment was carried out with great care.";
+    const highlightText = state.highlight ? highlights[state.highlight] : `I was impressed by their overall service.`;
+    const recPhrase = recommendations[rec] || recommendations['Highly Recommended'];
+
+    let finalReview = `${intro} ${expText} ${highlightText} ${recPhrase} ${extra ? extra : ''}`;
 
     const plainReview = finalReview.replace(/\*\*/g, '');
     state.generatedReview = plainReview;

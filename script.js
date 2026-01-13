@@ -40,7 +40,7 @@ function loadSiteConfig() {
     }
 
     if (!clientName || isLocal) {
-        clientName = clientName || 'techniciansaad';
+        clientName = clientName || 'drsaad';
     }
 
     const configFile = `configs/${clientName}.json`;
@@ -95,17 +95,17 @@ function initThreeJS() {
 
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.1,
-        color: 0x00F7FF, // Slightly tweaked to a more "clinical/clean" cyan
+        size: 0.12,
+        color: 0x0EA5E9,
         transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending
+        opacity: 0.4,
+        blending: THREE.NormalBlending
     });
 
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
-    const pointLight = new THREE.PointLight(0x00E0FF, 2, 50);
+    const pointLight = new THREE.PointLight(0x0EA5E9, 1.5, 50);
     pointLight.position.set(0, 0, 10);
     scene.add(pointLight);
 
